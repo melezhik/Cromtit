@@ -1,6 +1,6 @@
 # Cromtit
 
-Crontab for your [Tomtit](https://github.com/melezhik/Tomtit) scenarios
+Crontab (and more) for your [Tomtit](https://github.com/melezhik/Tomtit) scenarios
 
 # "What's in a name?"
 
@@ -13,9 +13,9 @@ Cromtit =  Cro(ntab) + Tomtit
 * Job dependencies 
 
 * Asynchronous jobs queue with throttling 
-to protect system overload
+to protect a system from overload
 
-* See logs and reports using cro app
+* See job logs and reports using cro app
 
 # Install
 
@@ -41,7 +41,7 @@ projects:
       crontab: "30 * * * *"
       action: install
       tomtit_options: --dump_task --env=dev
-      config:
+      vars: 
         foo: 1
         bar: 2
   - r3:
@@ -76,9 +76,9 @@ Should define name of tomtit scenario that will be run. Required.
 
 Tomtit cli options. Optional
 
-### config
+### vars
 
-Additional job configuration. Optional
+Additional environment variables get passed to a job. Optional
 
 ## Job Dependencies
 
