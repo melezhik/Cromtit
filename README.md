@@ -26,7 +26,7 @@ and configure Sparky first:
 
 Now, all you need is to starts Cromtit web api:
 
-2. Install cromtit
+2. Install Cromtit
 
 ```bash
 git clone https://github.com/melezhik/Cromtit.git
