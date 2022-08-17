@@ -40,7 +40,6 @@ projects:
       path: ~/projects/rakudo
       crontab: "30 * * * *"
       action: install
-      color: True # colorful output
       tomtit_options: --dump_task --env=dev
       config:
         foo: 1
@@ -49,7 +48,6 @@ projects:
       path: ~/projects/r3tool
       crontab: "30 * * * *"
       action: install
-      color: True # colorful output
 ```
 
 ## Project specific configuration
@@ -74,10 +72,6 @@ Optional. If not set, implies manual run.
 
 Should define name of tomtit scenario that will be run. Required.
  
-### Color
-
-Colorful output - require external dependency  (python module `ansi2html`). Optional.
-
 ### tomtit_options
 
 Tomtit cli options. Optional
@@ -85,6 +79,25 @@ Tomtit cli options. Optional
 ### config
 
 Additional job configuration. Optional
+
+## Job Dependencies
+
+Projects might have dependencies, so that some jobs might be run before or after
+a project's job:
+
+
+```yaml
+
+projects:
+  - web-test:
+      path: ~/projects/web-test
+      action: run
+      before: database
+        action: spinoff
+      after: database
+        action: remove 
+          
+```
 
 # Web console
 
