@@ -2,7 +2,7 @@
 
 Crontab for your [Tomtit](https://github.com/melezhik/Tomtit) scenarios
 
-# What in your name?
+# "What's in a name?"
 
 Cromtit =  Cro(ntab) + Tomtit 
 
