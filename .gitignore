@@ -1,0 +1,6 @@
+lib/.precomp/
+.precomp
+*.tar.gz
+.cache
+log.txt
+.sparrowdo
