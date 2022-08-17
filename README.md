@@ -42,8 +42,9 @@ projects:
 In every project create a `.cromtit.yaml` file inside root directory:
 
 ```yaml
-# run 
-crontab: "30,50,55 * * * *"
+# run `tom install`
+# ever in hour
+crontab: "30 * * * *"
 action: install
 ```
 
