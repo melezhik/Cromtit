@@ -45,5 +45,14 @@ follow [Sparky crontab format](https://github.com/melezhik/sparky#run-by-cron)
 
 ## Action
 
-Should define name of tomtit scenario that will be runf
+Should define name of tomtit scenario that will be run
  
+
+# Web console
+
+Cromtit exposes a web UI to track projects crontab runs and reports:
+
+http://127.0.0.1:6000
+
+
+
