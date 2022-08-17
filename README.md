@@ -8,7 +8,7 @@ Cromtit =  Cro(ntab) + Tomtit
 
 # Features
 
-* Runs Tomtit jobs as cron jobs
+* Run Tomtit jobs as cron jobs
 
 * See logs and reports using cro app
 
@@ -43,7 +43,7 @@ In every project create a `.cromtit.yaml` file inside root directory:
 
 ```yaml
 # run `tom install`
-# ever in hour
+# every one hour
 crontab: "30 * * * *"
 action: install
 ```
@@ -60,7 +60,7 @@ Should define name of tomtit scenario that will be run
 
 # Web console
 
-Cromtit exposes a web UI to track projects crontab runs and reports:
+Cromtit exposes a web UI to track projects, cron jobs and reports:
 
 http://127.0.0.1:6000
 
