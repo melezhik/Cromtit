@@ -46,6 +46,7 @@ In every project create a `.cromtit.yaml` file inside root directory:
 # every one hour
 crontab: "30 * * * *"
 action: install
+color: True # colorful output
 ```
 
 ## Crontab
@@ -57,6 +58,9 @@ follow [Sparky crontab format](https://github.com/melezhik/sparky#run-by-cron)
 
 Should define name of tomtit scenario that will be run
  
+## Color
+
+Colorful output - require external dependency  (python module `ansi2html`)
 
 # Web console
 
