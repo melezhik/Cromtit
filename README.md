@@ -70,7 +70,7 @@ Optional. If not set, implies manual run.
 
 ### Action
 
-Should define name of tomtit scenario that will be run. Required.
+Should define name of tomtit scenario that will be run. Required
  
 ### tomtit_options
 
@@ -87,23 +87,42 @@ a project's job:
 
 
 ```yaml
-
 projects:
+
+  - database:
+      path: ~/projects/database
+
   - web-test:
       path: ~/projects/web-test
       action: run
       before: database
         action: spinoff
+        vars:
+          db_name: test
+          db_user: test
+          db_password: pass
       after: database
         action: remove 
-          
+        vars:
+          db_name: test
 ```
+
+So `before` and `after` objects accepts following parameters:
+
+### name
+
+Project name. Required
+
+### action
+
+See project action job. Optional
+
+### vars
+
+See project job vars. Optional
 
 # Web console
 
 Cromtit exposes a web UI to track projects, cron jobs and reports:
 
 http://127.0.0.1:6000
-
-
-

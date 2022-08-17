@@ -28,7 +28,12 @@ class Pipeline
       my $options = config()<projects><$.crompt-project><tomtit_options> || "--verbose";
       my $log-file = "{$*CWD}/job.log"
       my $status-file = "{$*CWD}/job.status.log"
-      my %envvars = config()<projects><$.crompt-project><vars> || {};
+
+      my $j = Sparky::JobApi.new( mine => True );
+
+      my $vars = $j.get-stash();
+
+      my %envvars = $vars || config()<projects><$.crompt-project><vars> || {};
 
       bash(qq:to/HERE/, cwd => config()<projects><$.crompt-project><path>, envvars => %envvars );
         tom $options $action 1>$log-file 2>$log-file
