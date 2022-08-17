@@ -10,6 +10,11 @@ Cromtit =  Cro(ntab) + Tomtit
 
 * Run Tomtit jobs as cron jobs
 
+* Job dependencies 
+
+* Asynchronous jobs queue with throttling 
+to protect system overload
+
 * See logs and reports using cro app
 
 # Install
