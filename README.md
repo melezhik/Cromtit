@@ -29,22 +29,32 @@ cd Cromtit
 cro run
 ```
 
-# Configuration
+# Projects configuration
 
-Create `~/cromtit.yaml`
+Create `~/cromtit.yaml`, it should contain a list of projects:
 
 ```yaml
 # list of Tomtit projects
 projects:
   - rakudo:
-    - path: ~/projects/rakudo
+      path: ~/projects/rakudo
+      crontab: "30 * * * *"
+      action: install
+      color: True # colorful output
+      tomtit_options: --dump_task --env=dev
+      config:
+        foo: 1
+        bar: 2
   - r3:
-    - path: ~/projects/r3tool
+      path: ~/projects/r3tool
+      crontab: "30 * * * *"
+      action: install
+      color: True # colorful output
 ```
 
-# Projects configuration
+## Project specific configuration
 
-In every project create a `.cromtit.yaml` file inside root directory:
+Every project might have a specific configuration:
 
 ```yaml
 # run `tom install`
@@ -54,18 +64,27 @@ action: install
 color: True # colorful output
 ```
 
-## Crontab
+### Crontab
 
 Should represents crontab entry (how often and when to run a project), should
-follow [Sparky crontab format](https://github.com/melezhik/sparky#run-by-cron)
+follow [Sparky crontab format](https://github.com/melezhik/sparky#run-by-cron). 
+Optional. If not set, implies manual run.
 
-## Action
+### Action
 
-Should define name of tomtit scenario that will be run
+Should define name of tomtit scenario that will be run. Required.
  
-## Color
+### Color
 
-Colorful output - require external dependency  (python module `ansi2html`)
+Colorful output - require external dependency  (python module `ansi2html`). Optional.
+
+### tomtit_options
+
+Tomtit cli options. Optional
+
+### config
+
+Additional job configuration. Optional
 
 # Web console
 
