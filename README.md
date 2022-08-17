@@ -19,13 +19,19 @@ to protect a system from overload
 
 # Install
 
+Cromtit uses Sparky as job runner engine, so please install
+and configure Sparky first:
+
 1. Install [Sparky](https://github.com/melezhik/sparky#installation)
+
+Now, all you need is to starts Cromtit web api:
 
 2. Install cromtit
 
 ```bash
 git clone https://github.com/melezhik/Cromtit.git
 cd Cromtit
+zef install . --/test
 cro run
 ```
 
