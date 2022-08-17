@@ -2,6 +2,15 @@
 
 Crontab for your [Tomtit](https://github.com/melezhik/Tomtit) scenarios
 
+# What in your name?
+
+Cromtit =  Cro(ntab) + Tomtit 
+
+# Features
+
+* Runs Tomtit jobs as cron jobs
+
+* See logs and reports using cro app
 
 # Install
 
