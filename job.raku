@@ -1,20 +1,16 @@
 use Sparky::JobApi;
 
-class Pipeline
-
-  does Sparky::JobApi::Role
+class Pipeline does Sparky::JobApi::Role {
 
   has Str $.crompt-project = tags()<cromt-project>;
   has Str $.action = tags()<action>;
-
-  {
 
     method stage-main {
 
       my $j = self.new-job;
   
       $j.queue: %(
-        description => "{tags()<SPARKY_PROJECT>}.run"
+        description => "{tags()<SPARKY_PROJECT>} [job run]",
         tags => %(
           stage => "run"
         )
@@ -73,7 +69,7 @@ class Pipeline
         }
 
         $job.queue: %(
-          description => "{$crompt-project}.run"
+          description => "{$crompt-project} [job prepare]",
           tags => %(
             stage => "run",
             crompt-project => $crompt-project,
@@ -89,8 +85,8 @@ class Pipeline
 
     method !job-run (:$action,:$options,:$envvars,:$path) {
 
-      my $log-file = "{$*CWD}/job.log"
-      my $status-file = "{$*CWD}/job.status.log"
+      my $log-file = "{$*CWD}/job.log";
+      my $status-file = "{$*CWD}/job.status.log";
 
       say "job-run path={$path} action={$action} options={$options} envvars={$envvars.perl}";
 
@@ -105,9 +101,9 @@ class Pipeline
 
       say "copy report and status to {%*ENV<HOME>}/.cromtit/reports/{$job-id} ...";
 
-      cp($log-file,"{%*ENV<HOME>}/.cromtit/reports/{$job-id}/{$log-file.IO.basename}");
+      copy($log-file,"{%*ENV<HOME>}/.cromtit/reports/{$job-id}/{$log-file.IO.basename}");
 
-      cp($status-file,"{%*ENV<HOME>}/.cromtit/reports/{$job-id}/{$status-file.IO.basename}");
+      copy($status-file,"{%*ENV<HOME>}/.cromtit/reports/{$job-id}/{$status-file.IO.basename}");
 
     }
 
