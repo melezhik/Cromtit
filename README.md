@@ -152,8 +152,18 @@ See project action job. Optional
 
 See project job vars. Optional
 
+# Configuration file example
+
+You can find a configuration file example at `examples/` directory
+
 # Web console
 
 Sparky exposes a web UI to track projects, cron jobs and reports:
 
 http://127.0.0.1:4000
+
+# Thanks to
+
+God and Christ as "For the LORD gives wisdom; from his mouth come knowledge and understanding."
+
+

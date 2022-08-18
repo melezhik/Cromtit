@@ -81,7 +81,7 @@ class Pipeline does Sparky::JobApi::Role {
         }
 
         $job.queue: %(
-          description => "{$cromt-project} [job prepare]",
+          description => "{$cromt-project} [(d) job run]",
           tags => %(
             stage => "run",
             cromt-project => $cromt-project,
@@ -103,13 +103,15 @@ class Pipeline does Sparky::JobApi::Role {
 
         my $log-file = "{$*CWD}/job.log";
         my $status-file = "{$*CWD}/job.status.log";
+        my $effective-path = $path.subst(/^ '~' "/" /,"{%*ENV<HOME>}/");
 
         say "job-run path={$path} action={$act} options={$options} envvars={$envvars.perl}";
 
-        # bash qq:to/HERE/, %( cwd => $path, envvars => $envvars );
-        #   tom $options $act 1>$log-file 2>$log-file
-        #   echo \$? > $status-file
-        # HERE
+        bash qq:to/HERE/, %( cwd => $path, envvars => $envvars, description => "tomtit job"  );
+          #tom $options $act 1>$log-file 2>$log-file
+          #echo \$? > $status-file
+          SP6_LOG_NO_TIMESTAMPS=1 tom $options $act
+        HERE
 
         # my $job-id = now.Int;
 

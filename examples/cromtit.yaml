@@ -1,4 +1,6 @@
 projects:
+  rakudo:
+    path: ~/projects/rakudo
   r3:
     path: ~/projects/r3tool
     #crontab: "30 * * * *"
@@ -6,3 +8,7 @@ projects:
     options: --no_index_update
     vars:
       ISSUE: 1415
+    before:
+      -
+        name: rakudo
+        action: pull
