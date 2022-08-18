@@ -79,9 +79,9 @@ class Pipeline does Sparky::JobApi::Role {
 
         my $job = self.new-job;
 
-        if $job<vars> {
+        if $j<vars> {
           say "save job vars ...";    
-          $job.put-stash({ vars => $job<vars> });
+          $job.put-stash({ vars => $j<vars> });
         }
 
         $job.queue: %(
