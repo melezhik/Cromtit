@@ -24,7 +24,6 @@ class Pipeline
 
     method stage-run {
 
-
       my $options = config()<projects><$.crompt-project><tomtit_options> || "--verbose";
 
       my $action = $.action || config()<projects><$.crompt-project><action>;
@@ -37,15 +36,25 @@ class Pipeline
 
       my $path = config()<projects><$.crompt-project><path>;
 
-      self!run-job-dependeny(config()<projects><$.crompt-project><before> || []);
+      my @jobs = self!run-job-dependency(config()<projects><$.crompt-project><before> || []);
+
+      my $st = self.wait-jobs(@jobs);
+
+      die $st.perl unless $st<OK>;
 
       self!job-run: :$action,:$options,:$envvars,:$path;
 
-      self!run-job-dependeny(config()<projects><$.crompt-project><after> || []);
+      @jobs = self!run-job-dependency(config()<projects><$.crompt-project><after> || []);
+
+      $st = self.wait-jobs(@jobs);
+
+      die $st.perl unless $st<OK>;
 
     }
 
     method !job-run-dependency ($jobs) {
+
+      my @jobs;
 
       for $jobs -> $j {
 
@@ -53,13 +62,13 @@ class Pipeline
   
         my $crompt-project = $j<project>;
 
-        my $j = self.new-job :project<cromtit.queue>;
+        my $job = self.new-job :project<cromtit.queue>;
 
-        if $j<vars> {
-          $j.put-stash({ vars => $j<vars> });
+        if $job<vars> {
+          $job.put-stash({ vars => $j<vars> });
         }
 
-        $j.queue: %(
+        $job.queue: %(
           description => "{$crompt-project}.run"
           tags => %(
             stage => "run",
@@ -67,7 +76,10 @@ class Pipeline
           )
         );
 
+        @jobs.push: $job;
       }
+
+      return @jobs;
 
     }
 
