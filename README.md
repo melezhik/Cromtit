@@ -35,7 +35,7 @@ zef install . --/test
 cro run
 ```
 
-## Configuration
+# Configure
 
 Create `~/cromtit.yaml` file, See `Projects configuration` section. 
 
@@ -45,7 +45,7 @@ Once a configuration file is created:
 raku  utils/config-apply.raku
 ```
 
-# ~/cromtit.yaml file
+# ~/cromtit.yaml specification
 
  `~/cromtit.yaml` should contain a list of Tomtit projects:
 
