@@ -25,17 +25,30 @@ class Pipeline
     method stage-run {
 
       my $action = $action || config()<projects><$.crompt-project><action>;
+
       my $options = config()<projects><$.crompt-project><tomtit_options> || "--verbose";
-      my $log-file = "{$*CWD}/job.log"
-      my $status-file = "{$*CWD}/job.status.log"
 
       my $j = Sparky::JobApi.new( mine => True );
 
       my $vars = $j.get-stash();
 
-      my %envvars = $vars || config()<projects><$.crompt-project><vars> || {};
+      my $envvars = $vars || config()<projects><$.crompt-project><vars> || {};
 
-      bash(qq:to/HERE/, cwd => config()<projects><$.crompt-project><path>, envvars => %envvars );
+      my $path = config()<projects><$.crompt-project><path>;
+
+      self!job-run: :$action,:$options,:$envvars,:$path;
+
+    }
+
+
+    method !job-run (:$action,:$options,:$envvars,:$path) {
+
+      my $log-file = "{$*CWD}/job.log"
+      my $status-file = "{$*CWD}/job.status.log"
+
+      say "job-run path={$path} action={$action} options={$options} envvars={$envvars.perl}";
+
+      bash(qq:to/HERE/, cwd => $path, envvars => $envvars );
         tom $options $action 1>$log-file 2>$log-file
         echo \$? > $status-file
       HERE
