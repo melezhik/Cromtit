@@ -17,10 +17,10 @@ if $conf-file.IO ~~ :e {
     say "[import project $p to sparky]";
     say "create dir $sparky-root-dir/$p";
     mkdir "$sparky-root-dir/$p";
-    say "cp .cromt-templates/job.raku -> $sparky-root-dir/$p/sparrowfile";
-    copy ".cromt-templates/job.raku", "$sparky-root-dir/$p/sparrowfile";
+    say "cp cromt-templates/job.raku -> $sparky-root-dir/$p/sparrowfile";
+    copy "cromt-templates/job.raku", "$sparky-root-dir/$p/sparrowfile";
     say "prepare sparky.yaml ...";
-    my $sparky-yaml = ".cromt-templates/sparky.yaml".IO.slurp;
+    my $sparky-yaml = "cromt-templates/sparky.yaml".IO.slurp;
     $sparky-yaml.=subst("%cromt-project%",$p);
     if $pd<crontab> {
       $sparky-yaml.=subst("#%crontab%","crontab: {$pd<crontab>}") 

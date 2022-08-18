@@ -4,7 +4,7 @@ sparrowdo:
   bootstrap: false
   format: default
   tags: stage=main,cromt-project=%cromt-project%
-  #%crontab%
+#%crontab%
 disabled: false
 allow_manual_run: true
 keep_builds: 10
