@@ -24,19 +24,19 @@ class Pipeline does Sparky::JobApi::Role {
 
     method stage-run {
 
-      my $options = config()<projects><$.crompt-project><tomtit_options> || "--verbose";
+      my $options = config()<projects>{$.crompt-project}<tomtit_options> || "--verbose";
 
-      my $action = $.action || config()<projects><$.crompt-project><action>;
+      my $action = $.action || config()<projects>{$.crompt-project}<action>;
 
       my $j = Sparky::JobApi.new( mine => True );
 
       my $vars = $j.get-stash();
 
-      my $envvars = $vars || config()<projects><$.crompt-project><vars> || {};
+      my $envvars = $vars || config()<projects>{$.crompt-project}<vars> || {};
 
-      my $path = config()<projects><$.crompt-project><path>;
+      my $path = config()<projects>{$.crompt-project}<path>;
 
-      my @jobs = self!run-job-dependency(config()<projects><$.crompt-project><before> || []);
+      my @jobs = self!run-job-dependency(config()<projects>{$.crompt-project}<before> || []);
 
       my $st = self.wait-jobs(@jobs);
 
@@ -44,7 +44,7 @@ class Pipeline does Sparky::JobApi::Role {
 
       self!job-run: :$action,:$options,:$envvars,:$path;
 
-      @jobs = self!run-job-dependency(config()<projects><$.crompt-project><after> || []);
+      @jobs = self!run-job-dependency(config()<projects>{$.crompt-project}<after> || []);
 
       $st = self.wait-jobs(@jobs);
 
