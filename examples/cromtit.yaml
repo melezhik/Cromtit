@@ -12,3 +12,5 @@ projects:
       -
         name: rakudo
         action: pull
+        vars:
+          foo: 1

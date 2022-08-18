@@ -36,9 +36,9 @@ class Pipeline does Sparky::JobApi::Role {
 
       my $j = Sparky::JobApi.new( mine => True );
 
-      my $vars = $j.get-stash();
+      my $stash = $j.get-stash();
 
-      my $envvars = $vars || config()<projects>{$.cromt-project}<vars> || {};
+      my $envvars = $stash<vars> || config()<projects>{$.cromt-project}<vars> || {};
 
       my $path = config()<projects>{$.cromt-project}<path>;
 
@@ -80,7 +80,8 @@ class Pipeline does Sparky::JobApi::Role {
         my $job = self.new-job;
 
         if $job<vars> {
-          $job.put-stash({ vars => $j<vars> });
+          say "save job vars ...";    
+          $job.put-stash({ vars => $job<vars> });
         }
 
         $job.queue: %(
