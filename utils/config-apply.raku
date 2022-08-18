@@ -27,6 +27,10 @@ if $conf-file.IO ~~ :e {
     }
     say "create  $sparky-root-dir/$p/sparky.yaml";
     "$sparky-root-dir/$p/sparky.yaml".IO.spurt($sparky-yaml);
+
+    say "create  $sparky-root-dir/$p/config.pl6";
+    "$sparky-root-dir/$p/config.pl6".IO.spurt($conf.perl);
+
   }
 
 } else {

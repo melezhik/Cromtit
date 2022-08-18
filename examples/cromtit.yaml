@@ -1,7 +1,7 @@
 projects:
   r3:
     path: ~/projects/r3tool
-    crontab: "30 * * * *"
+    #crontab: "30 * * * *"
     action: pull html-report
     options: --no_index_update
     vars:

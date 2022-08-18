@@ -2,8 +2,11 @@ use Sparky::JobApi;
 
 class Pipeline does Sparky::JobApi::Role {
 
-  has Str $.crompt-project = tags()<cromt-project>;
-  has Str $.action = tags()<action>;
+  has Str $.cromt-project = tags()<cromt-project>;
+
+  has Str $.action = tags()<action> || config()<projects>{$!cromt-project}<action> || "default";
+
+  has Str $.options = tags()<options> || config()<projects>{$!cromt-project}<options> || "--verbose";
 
     method stage-main {
 
@@ -12,7 +15,10 @@ class Pipeline does Sparky::JobApi::Role {
       $j.queue: %(
         description => "{tags()<SPARKY_PROJECT>} [job run]",
         tags => %(
-          stage => "run"
+          stage => "run",
+          cromt-project => $.cromt-project,
+          action => $.action,
+          options => $.options,
         )
       );
 
@@ -24,43 +30,49 @@ class Pipeline does Sparky::JobApi::Role {
 
     method stage-run {
 
-      my $options = config()<projects>{$.crompt-project}<tomtit_options> || "--verbose";
+      my $options = $.options
 
-      my $action = $.action || config()<projects>{$.crompt-project}<action>;
+      my $action = $.action;
 
       my $j = Sparky::JobApi.new( mine => True );
 
       my $vars = $j.get-stash();
 
-      my $envvars = $vars || config()<projects>{$.crompt-project}<vars> || {};
+      my $envvars = $vars || config()<projects>{$.cromt-project}<vars> || {};
 
-      my $path = config()<projects>{$.crompt-project}<path>;
+      my $path = config()<projects>{$.cromt-project}<path>;
 
-      my @jobs = self!run-job-dependency(config()<projects>{$.crompt-project}<before> || []);
+      if config()<projects>{$.cromt-project}<before> {
 
-      my $st = self.wait-jobs(@jobs);
+        my @jobs = self!run-job-dependency(config()<projects>{$.cromt-project}<before>);
 
-      die $st.perl unless $st<OK>;
+        my $st = self.wait-jobs(@jobs);
+
+        die $st.perl unless $st<OK>;
+
+      }
 
       self!job-run: :$action,:$options,:$envvars,:$path;
 
-      @jobs = self!run-job-dependency(config()<projects>{$.crompt-project}<after> || []);
+      if config()<projects>{$.cromt-project}<after> {
 
-      $st = self.wait-jobs(@jobs);
+        my @jobs = self!run-job-dependency(config()<projects>{$.cromt-project}<after>);
 
-      die $st.perl unless $st<OK>;
+        my $st = self.wait-jobs(@jobs);
+
+        die $st.perl unless $st<OK>;
+
+      }
 
     }
 
-    method !job-run-dependency ($jobs) {
+    method !run-job-dependency ($jobs) {
 
       my @jobs;
 
-      for $jobs -> $j {
-
-        my $action = $.action || $j<action>;
+      for $jobs<> -> $j {
   
-        my $crompt-project = $j<name>;
+        my $cromt-project = $j<name>;
 
         my $job = self.new-job;
 
@@ -69,10 +81,12 @@ class Pipeline does Sparky::JobApi::Role {
         }
 
         $job.queue: %(
-          description => "{$crompt-project} [job prepare]",
+          description => "{$cromt-project} [job prepare]",
           tags => %(
             stage => "run",
-            crompt-project => $crompt-project,
+            cromt-project => $cromt-project,
+            action => $j<action>,
+            options => $j<options>
           )
         );
 
@@ -85,26 +99,29 @@ class Pipeline does Sparky::JobApi::Role {
 
     method !job-run (:$action,:$options,:$envvars,:$path) {
 
-      my $log-file = "{$*CWD}/job.log";
-      my $status-file = "{$*CWD}/job.status.log";
+      for $action.split(/\s+/) -> $act {  
 
-      say "job-run path={$path} action={$action} options={$options} envvars={$envvars.perl}";
+        my $log-file = "{$*CWD}/job.log";
+        my $status-file = "{$*CWD}/job.status.log";
 
-      bash(qq:to/HERE/, cwd => $path, envvars => $envvars );
-        tom $options $action 1>$log-file 2>$log-file
-        echo \$? > $status-file
-      HERE
+        say "job-run path={$path} action={$act} options={$options} envvars={$envvars.perl}";
 
-      my $job-id = now.Int;
+        # bash qq:to/HERE/, %( cwd => $path, envvars => $envvars );
+        #   tom $options $act 1>$log-file 2>$log-file
+        #   echo \$? > $status-file
+        # HERE
 
-      mkdir "{%*ENV<HOME>}/.cromtit/reports/{$job-id}";
+        # my $job-id = now.Int;
 
-      say "copy report and status to {%*ENV<HOME>}/.cromtit/reports/{$job-id} ...";
+        # mkdir "{%*ENV<HOME>}/.cromtit/reports/{$job-id}";
 
-      copy($log-file,"{%*ENV<HOME>}/.cromtit/reports/{$job-id}/{$log-file.IO.basename}");
+        # say "copy report and status to {%*ENV<HOME>}/.cromtit/reports/{$job-id} ...";
 
-      copy($status-file,"{%*ENV<HOME>}/.cromtit/reports/{$job-id}/{$status-file.IO.basename}");
+        # copy($log-file,"{%*ENV<HOME>}/.cromtit/reports/{$job-id}/{$log-file.IO.basename}");
 
+        # copy($status-file,"{%*ENV<HOME>}/.cromtit/reports/{$job-id}/{$status-file.IO.basename}");
+
+      }
     }
 
   }

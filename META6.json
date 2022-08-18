@@ -5,6 +5,8 @@
   ],
   "build-depends" : [ ],
   "depends" : [
+    "YAMLish",
+    "Data::Dump"
   ],
   "description" : "Cromtit - Crontab (and more) for your Tomtit scenarios",
   "license" : "Artistic-2.0",
