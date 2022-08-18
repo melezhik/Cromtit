@@ -42,31 +42,36 @@ Create `~/cromtit.yaml`, it should contain a list of projects:
 ```yaml
 # list of Tomtit projects
 projects:
-  - rakudo:
-      path: ~/projects/rakudo
-      crontab: "30 * * * *"
-      action: install
-      tomtit_options: --dump_task --env=dev
-      vars: 
-        foo: 1
-        bar: 2
-  - r3:
-      path: ~/projects/r3tool
-      crontab: "30 * * * *"
-      action: install
+  rakudo:
+    path: ~/projects/rakudo
+    crontab: "30 * * * *"
+    action: install
+    options: --dump_task --env=dev
+    vars: 
+      foo: 1
+      bar: 2
+  r3:
+    path: ~/projects/r3tool
+    crontab: "30 * * * *"
+    action: install
 ```
 
 ## Project specific configuration
 
-Every project might have a specific configuration:
+Every project item  has a specific configuration:
 
 ```yaml
-# run `tom install`
-# every one hour
-crontab: "30 * * * *"
-action: install
-color: True # colorful output
+  rakudo:
+    # run `tom install`
+    # every one hour
+    crontab: "30 * * * *"
+    action: install
+    options: --no_index_update
 ```
+
+### Key
+
+Key should define a unique project name.
 
 ### Crontab
 
@@ -76,9 +81,17 @@ Optional. If not set, implies manual run.
 
 ### Action
 
-Should define name of tomtit scenario that will be run. Required
+Should define name of tomtit scenario that will be run. Required.
+
+Multiple actions could be set as a space separated string:
+
+```yaml
+
+  # will trigger `tom pull` && `tom build` && `tom install`
+  action: pull build install
+```
  
-### tomtit_options
+### options
 
 Tomtit cli options. Optional
 
@@ -95,26 +108,26 @@ a project's job:
 ```yaml
 projects:
 
-  - database:
-      path: ~/projects/database
+  database:
+    path: ~/projects/database
 
-  - web-test:
-      path: ~/projects/web-test
-      action: run
-      before: 
-        -
-          name: database
-          action: spinoff
-          vars:
-            db_name: test
-            db_user: test
-            db_password: pass
-      after:
-        - 
-          name: database
-          action: remove 
-          vars:
-            db_name: test
+  web-test:
+    path: ~/projects/web-test
+    action: run
+    before: 
+      -
+        name: database
+        action: spinoff
+        vars:
+          db_name: test
+          db_user: test
+          db_password: pass
+    after:
+      - 
+        name: database
+        action: remove 
+        vars:
+          db_name: test
 ```
 
 So `before` and `after` are list of objects that accept following parameters:

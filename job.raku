@@ -11,7 +11,7 @@ class Pipeline
 
     method stage-main {
 
-      my $j = self.new-job :project<cromtit.queue>;
+      my $j = self.new-job;
   
       $j.queue: %(
         description => "{tags()<SPARKY_PROJECT>}.run"
@@ -19,6 +19,10 @@ class Pipeline
           stage => "run"
         )
       );
+
+      my $st = self.wait-job($j);
+
+      die $st.perl unless $st<OK>;
 
     }
 
