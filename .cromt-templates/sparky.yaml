@@ -1,0 +1,10 @@
+sparrowdo:
+  no_sudo: true
+  no_index_update: true
+  bootstrap: false
+  format: default
+  tags: stage=main,cromt-project=%cromt-project%
+  #%crontab%
+disabled: false
+allow_manual_run: true
+keep_builds: 10

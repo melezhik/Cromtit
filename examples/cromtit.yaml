@@ -1,5 +1,5 @@
 projects:
-  rakudo:
+  r3:
     path: ~/projects/r3tool
     crontab: "30 * * * *"
     action: pull html-report

@@ -12,10 +12,9 @@ Cromtit =  Cro(ntab) + Tomtit
 
 * Job dependencies 
 
-* Asynchronous jobs queue with throttling 
-to protect a system from overload
+* Asynchronous jobs queue with throttling to protect a system from overload
 
-* See job logs and reports using cro app
+* View job logs and reports via cro app web interface
 
 # Install
 
@@ -37,7 +36,7 @@ cro run
 
 # Configure
 
-Create `~/cromtit.yaml` file, See `Projects configuration` section. 
+Create `~/cromtit.yaml` file, see `Projects configuration` section. 
 
 Once a configuration file is created, apply changes:
 
