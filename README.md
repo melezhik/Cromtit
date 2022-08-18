@@ -156,6 +156,12 @@ See project action job. Optional
 
 See project job vars. Optional
 
+## Nested Dependencies
+
+Nested dependencies are allowed, so a dependency might another dependency, so on.
+
+Just be cautious about cycles. This should be directed acycling dependency graph.
+ 
 # Configuration file example
 
 You can find a configuration file example at `examples/` directory
