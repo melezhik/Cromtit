@@ -39,7 +39,7 @@ cro run
 
 Create `~/cromtit.yaml` file, See `Projects configuration` section. 
 
-Once a configuration file is created:
+Once a configuration file is created, apply changes:
 
 ```bash
 raku  utils/config-apply.raku
