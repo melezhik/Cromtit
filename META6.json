@@ -1,0 +1,25 @@
+{
+  "auth": "zef:melezhik",
+  "authors" : [
+    "Alexey Melezhik"
+  ],
+  "build-depends" : [ ],
+  "depends" : [
+  ],
+  "description" : "Cromtit - Crontab (and more) for your Tomtit scenarios",
+  "license" : "Artistic-2.0",
+  "name" : "Cromtit",
+  "perl" : "6.*",
+  "provides" : {
+    "Cromtit" : "lib/Cromtit.rakumod"
+  },
+  "source-type" : "git",
+  "source-url" : "https://github.com/melezhik/Cromtit",
+  "support" : {
+    "bugtracker" : "https://github.com/melezhik/Cromtit/issues",
+    "source" : "https://github.com/melezhik/Cromtit.git"
+  },
+  "tags" : [ ],
+  "test-depends" : [ ],
+  "version" : "0.0.1"
+}
