@@ -31,7 +31,6 @@ Now, all you need is to starts Cromtit web api:
 git clone https://github.com/melezhik/Cromtit.git
 cd Cromtit
 zef install . --/test
-cro run
 ```
 
 # Configure
@@ -155,6 +154,6 @@ See project job vars. Optional
 
 # Web console
 
-Cromtit exposes a web UI to track projects, cron jobs and reports:
+Sparky exposes a web UI to track projects, cron jobs and reports:
 
-http://127.0.0.1:6000
+http://127.0.0.1:4000
