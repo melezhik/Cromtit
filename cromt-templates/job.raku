@@ -30,7 +30,7 @@ class Pipeline does Sparky::JobApi::Role {
 
     method stage-run {
 
-      my $options = $.options
+      my $options = $.options;
 
       my $action = $.action;
 
