@@ -84,7 +84,7 @@ class Pipeline does Sparky::JobApi::Role {
         }
 
         $job.queue: %(
-          description => "{$cromt-project} [(d) job run]",
+          description => "(d) {$cromt-project} [job run]",
           tags => %(
             stage => "run",
             cromt-project => $cromt-project,
