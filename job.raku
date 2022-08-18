@@ -62,7 +62,7 @@ class Pipeline
   
         my $crompt-project = $j<project>;
 
-        my $job = self.new-job :project<cromtit.queue>;
+        my $job = self.new-job;
 
         if $job<vars> {
           $job.put-stash({ vars => $j<vars> });
