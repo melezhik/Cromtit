@@ -46,6 +46,7 @@ class Pipeline does Sparky::JobApi::Role {
 
         my @jobs = self!run-job-dependency(config()<projects>{$.cromt-project}<before>);
 
+        say "waiting for dependencies jobs have finsihed ...";
         my $st = self.wait-jobs(@jobs);
 
         die $st.perl unless $st<OK>;
@@ -57,6 +58,8 @@ class Pipeline does Sparky::JobApi::Role {
       if config()<projects>{$.cromt-project}<after> {
 
         my @jobs = self!run-job-dependency(config()<projects>{$.cromt-project}<after>);
+
+        say "waiting for dependencies jobs have finsihed ...";
 
         my $st = self.wait-jobs(@jobs);
 
@@ -105,12 +108,12 @@ class Pipeline does Sparky::JobApi::Role {
         my $status-file = "{$*CWD}/job.status.log";
         my $effective-path = $path.subst(/^ '~' "/" /,"{%*ENV<HOME>}/");
 
-        say "job-run path={$path} action={$act} options={$options} envvars={$envvars.perl}";
+        say ">> run job path={$path} action={$act} options={$options} envvars={$envvars.perl}";
 
         bash qq:to/HERE/, %( cwd => $path, envvars => $envvars, description => "tomtit job"  );
           #tom $options $act 1>$log-file 2>$log-file
           #echo \$? > $status-file
-          SP6_LOG_NO_TIMESTAMPS=1 tom $options $act
+          SP6_FORMAT_TERSE=1 tom $options $act
         HERE
 
         # my $job-id = now.Int;
