@@ -101,19 +101,23 @@ projects:
   - web-test:
       path: ~/projects/web-test
       action: run
-      before: database
-        action: spinoff
-        vars:
-          db_name: test
-          db_user: test
-          db_password: pass
-      after: database
-        action: remove 
-        vars:
-          db_name: test
+      before: 
+        -
+          name: database
+          action: spinoff
+          vars:
+            db_name: test
+            db_user: test
+            db_password: pass
+      after:
+        - 
+          name: database
+          action: remove 
+          vars:
+            db_name: test
 ```
 
-So `before` and `after` objects accepts following parameters:
+So `before` and `after` are list of objects that accept following parameters:
 
 ### name
 

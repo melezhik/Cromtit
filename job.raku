@@ -60,7 +60,7 @@ class Pipeline
 
         my $action = $.action || $j<action>;
   
-        my $crompt-project = $j<project>;
+        my $crompt-project = $j<name>;
 
         my $job = self.new-job;
 
