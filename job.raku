@@ -24,9 +24,10 @@ class Pipeline
 
     method stage-run {
 
-      my $action = $action || config()<projects><$.crompt-project><action>;
 
       my $options = config()<projects><$.crompt-project><tomtit_options> || "--verbose";
+
+      my $action = $.action || config()<projects><$.crompt-project><action>;
 
       my $j = Sparky::JobApi.new( mine => True );
 
@@ -36,10 +37,39 @@ class Pipeline
 
       my $path = config()<projects><$.crompt-project><path>;
 
+      self!run-job-dependeny(config()<projects><$.crompt-project><before> || []);
+
       self!job-run: :$action,:$options,:$envvars,:$path;
+
+      self!run-job-dependeny(config()<projects><$.crompt-project><after> || []);
 
     }
 
+    method !job-run-dependency ($jobs) {
+
+      for $jobs -> $j {
+
+        my $action = $.action || $j<action>;
+  
+        my $crompt-project = $j<project>;
+
+        my $j = self.new-job :project<cromtit.queue>;
+
+        if $j<vars> {
+          $j.put-stash({ vars => $j<vars> });
+        }
+
+        $j.queue: %(
+          description => "{$crompt-project}.run"
+          tags => %(
+            stage => "run",
+            crompt-project => $crompt-project,
+          )
+        );
+
+      }
+
+    }
 
     method !job-run (:$action,:$options,:$envvars,:$path) {
 
