@@ -14,7 +14,9 @@ Cromtit =  Cro(ntab) + Tomtit
 
 * Job dependencies 
 
-* Asynchronous jobs queue with throttling to protect a system from overload (TBD)
+* Asynchronous jobs queue 
+
+* Throttling to protect a system from overload (TBD)
 
 * View job logs and reports via cro app web interface
 
