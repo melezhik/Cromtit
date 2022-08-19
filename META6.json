@@ -15,6 +15,10 @@
   "provides" : {
     "Cromtit" : "lib/Cromtit.rakumod"
   },
+  "resources" : [
+    "job.raku",
+    "sparky.yaml"
+  ],
   "source-type" : "git",
   "source-url" : "https://github.com/melezhik/Cromtit",
   "support" : {

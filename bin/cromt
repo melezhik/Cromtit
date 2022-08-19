@@ -1,26 +1,35 @@
+#!raku
+
+sub MAIN (
+  Str  :$conf = "{%*ENV<HOME>}/cromtit.yaml"
+)
+
+{
+
 use YAMLish;
+
 use Data::Dump;
 
-my $conf-file = "{%*ENV<HOME>}/cromtit.yaml";
+use Cromtit;
 
 my $sparky-root-dir = "{%*ENV<HOME>}/.sparky/projects";
 
-if $conf-file.IO ~~ :e {
+if $conf.IO ~~ :e {
 
-  say "load conf from file $conf-file  ...";
+  say "load conf from file $conf  ...";
 
-  my $conf = load-yaml($conf-file.IO.slurp);
+  my $config = load-yaml($conf.IO.slurp);
 
   #say Dump($conf);
 
-  for $conf<projects>.kv -> $p, $pd {
+  for $config<projects>.kv -> $p, $pd {
     say "[import project $p to sparky]";
     say "create dir $sparky-root-dir/$p";
     mkdir "$sparky-root-dir/$p";
-    say "cp cromt-templates/job.raku -> $sparky-root-dir/$p/sparrowfile";
-    copy "cromt-templates/job.raku", "$sparky-root-dir/$p/sparrowfile";
+    say "create $sparky-root-dir/$p/sparrowfile";
+    "$sparky-root-dir/$p/sparrowfile".IO.spurt(job-template());
     say "prepare sparky.yaml ...";
-    my $sparky-yaml = "cromt-templates/sparky.yaml".IO.slurp;
+    my $sparky-yaml = sparky-template();
     $sparky-yaml.=subst("%cromt-project%",$p);
     if $pd<crontab> {
       $sparky-yaml.=subst("#%crontab%","crontab: {$pd<crontab>}") 
@@ -29,10 +38,12 @@ if $conf-file.IO ~~ :e {
     "$sparky-root-dir/$p/sparky.yaml".IO.spurt($sparky-yaml);
 
     say "create  $sparky-root-dir/$p/config.pl6";
-    "$sparky-root-dir/$p/config.pl6".IO.spurt($conf.perl);
+    "$sparky-root-dir/$p/config.pl6".IO.spurt($config.perl);
 
   }
 
 } else {
-  say "conf file $conf-file doesn't exist, exiting ..."
+  say "conf file $conf doesn't exist, exiting ..."
+}
+
 }

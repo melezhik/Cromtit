@@ -44,7 +44,7 @@ Create `~/cromtit.yaml` file, see `Projects configuration` section.
 Once a configuration file is created, apply changes:
 
 ```bash
-raku  utils/config-apply.raku
+cromt
 ```
 
 # ~/cromtit.yaml specification
