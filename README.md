@@ -85,13 +85,13 @@ Every project item  has a specific configuration:
 
 Key should define a unique project name.
 
-### Crontab
+### crontab
 
 Should represents crontab entry (how often and when to run a project), should
 follow [Sparky crontab format](https://github.com/melezhik/sparky#run-by-cron). 
 Optional. If not set, implies manual run.
 
-### Action
+### action
 
 Should define name of tomtit scenario that will be run. Required.
 
@@ -142,7 +142,7 @@ projects:
           db_name: test
 ```
 
-So `before` and `after` are list of objects that accept following parameters:
+So, `before` and `after` are list of objects that accept following parameters:
 
 ### name
 
@@ -150,7 +150,7 @@ Project name. Required
 
 ### action
 
-See project action job. Optional
+See project job action. Optional
 
 ### vars
 
