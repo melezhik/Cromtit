@@ -52,16 +52,20 @@ cromt
 projects:
   rakudo:
     path: ~/projects/rakudo
-    crontab: "30 * * * *"
-    action: install
-    options: --dump_task --env=dev
-    vars: 
-      foo: 1
-      bar: 2
+    options: --no_index_update
   r3:
     path: ~/projects/r3tool
     crontab: "30 * * * *"
-    action: install
+    action: pull html-report
+    options: --no_index_update --dump_task
+    vars:
+      ISSUE: 1415
+    before:
+      -
+        name: rakudo
+        action: pull install 
+        vars:
+          foo: 10
 ```
 
 ## Project specific configuration
@@ -70,7 +74,7 @@ Every project item  has a specific configuration:
 
 ```yaml
   rakudo:
-    # run `tom install`
+    # run `tom install` 
     # every one hour
     crontab: "30 * * * *"
     action: install
@@ -119,13 +123,13 @@ projects:
   database:
     path: ~/projects/database
 
-  web-test:
-    path: ~/projects/web-test
-    action: run
+  app:
+    path: ~/projects/app
+    action: test
     before: 
       -
         name: database
-        action: spinoff
+        action: create
         vars:
           db_name: test
           db_user: test
@@ -171,5 +175,3 @@ http://127.0.0.1:4000
 # Thanks to
 
 God and Christ as "For the LORD gives wisdom; from his mouth come knowledge and understanding."
-
-
