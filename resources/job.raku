@@ -114,7 +114,7 @@ class Pipeline does Sparky::JobApi::Role {
         bash qq:to/HERE/, %( cwd => $path, envvars => $envvars, description => "tomtit job"  );
           #tom $options $act 1>$log-file 2>$log-file
           #echo \$? > $status-file
-          SP6_FORMAT_TERSE=1 SP6_LOG_NO_TIMESTAMPS=1 tom $options $act
+          SP6_LOG_NO_TIMESTAMPS=1 tom $options $act
         HERE
 
         # my $job-id = now.Int;

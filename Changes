@@ -2,6 +2,10 @@ Revision history for Cromtit
 
 {{$NEXT}}
 
+0.0.4 2022-08-18T23:05:00Z
+
+    Minor fix in report format
+
 0.0.3 2022-08-18T21:20:00Z
 
     More realistic example of config
