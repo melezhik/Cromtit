@@ -1,12 +1,12 @@
 # Cromtit
 
-Crontab (and more) for your [Tomtit](https://github.com/melezhik/Tomtit) scenarios
+Run [Tomtit](https://github.com/melezhik/Tomtit) scenarios as cron jobs and more.
 
-![web ui](samples/web-ui.jpeg)
+![web ui](https://raw.githubusercontent.com/melezhik/Cromtit/main/samples/web-ui.jpeg)
 
 # "What's in a name?"
 
-Cromtit =  Cro(ntab) + Tomtit 
+Cromtit =  Crontab + Tomtit 
 
 # Features
 
@@ -27,14 +27,10 @@ and configure Sparky first:
 
 1. Install [Sparky](https://github.com/melezhik/sparky#installation)
 
-Now, all you need is to starts Cromtit web api:
-
 2. Install Cromtit
 
 ```bash
-git clone https://github.com/melezhik/Cromtit.git
-cd Cromtit
-zef install . --/test
+zef install Cromtit
 ```
 
 # Configure
@@ -158,7 +154,7 @@ See project job vars. Optional
 
 ## Nested Dependencies
 
-Nested dependencies are allowed, so a dependency might another dependency, so on.
+Nested dependencies are allowed, so a dependency might have another dependency, so on.
 
 Just be cautious about cycles. This should be directed acycling dependency graph.
  

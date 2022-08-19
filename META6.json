@@ -8,7 +8,7 @@
     "YAMLish",
     "Data::Dump"
   ],
-  "description" : "Cromtit - Crontab (and more) for your Tomtit scenarios",
+  "description" : "Cromtit - Run Tomtit scenarios as cron jobs and more",
   "license" : "Artistic-2.0",
   "name" : "Cromtit",
   "perl" : "6.*",
@@ -27,5 +27,5 @@
   },
   "tags" : [ ],
   "test-depends" : [ ],
-  "version" : "0.0.1"
+  "version" : "0.0.2"
 }
