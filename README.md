@@ -1,5 +1,7 @@
 # Cromtit
 
+[![SparkyCI](http://sparrowhub.io:2222/project/gh-melezhik-Cromtit/badge)](http://sparrowhub.io:2222)
+
 Run [Tomtit](https://github.com/melezhik/Tomtit) scenarios as cron jobs and more.
 
 ![web ui](https://raw.githubusercontent.com/melezhik/Cromtit/main/samples/web-ui.jpeg)
