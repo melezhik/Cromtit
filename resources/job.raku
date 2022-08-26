@@ -110,13 +110,18 @@ class Pipeline does Sparky::JobApi::Role {
         my $effective-path = $path.subst(/^ '~' "/" /,"{%*ENV<HOME>}/");
 
         say ">> run job path={$path} action={$act} options={$options} envvars={$envvars.perl}";
-
-        bash qq:to/HERE/, %( cwd => $path, envvars => $envvars, description => "tomtit job"  );
+        my $eff-path = $path;
+        if $path ~~ /^^ 'git@' / {
+          directory-delete "scm";
+          directory "scm";
+          git-scm $path, %( to => "scm" );
+          $eff-path = "{$*CWD}/scm";
+        }
+        bash qq:to/HERE/, %( cwd => $eff-path, envvars => $envvars, description => "tomtit job"  );
           #tom $options $act 1>$log-file 2>$log-file
           #echo \$? > $status-file
           SP6_LOG_NO_TIMESTAMPS=1 tom $options $act
         HERE
-
         # my $job-id = now.Int;
 
         # mkdir "{%*ENV<HOME>}/.cromtit/reports/{$job-id}";
