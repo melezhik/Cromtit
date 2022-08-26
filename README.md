@@ -56,20 +56,15 @@ cromt
 projects:
   rakudo:
     path: ~/projects/rakudo
-    options: --no_index_update
   r3:
     path: ~/projects/r3tool
     crontab: "30 * * * *"
     action: pull html-report
     options: --no_index_update --dump_task
-    vars:
-      ISSUE: 1415
     before:
       -
         name: rakudo
         action: pull install 
-        vars:
-          foo: 10
 ```
 
 ## Project specific configuration
@@ -77,35 +72,63 @@ projects:
 Every project item  has a specific configuration:
 
 ```yaml
-  rakudo:
+  app:
     # run `tom install` 
     # every one hour
     crontab: "30 * * * *"
     action: install
+    # with tomtit options:
     options: --no_index_update
+    # setting env variables:
+    vars:
+      foo: 1
+      bar: 2
 ```
 
 ### Key
 
 Key should define a unique project name.
 
-### crontab
-
-Should represents crontab entry (how often and when to run a project), should
-follow [Sparky crontab format](https://github.com/melezhik/sparky#run-by-cron). 
-Optional. If not set, implies manual run.
-
 ### action
 
-Should define name of tomtit scenario that will be run. Required.
+Should define name of tomtit scenario that will be run. Optional.
 
 Multiple actions could be set as a space separated string:
 
 ```yaml
-
   # will trigger `tom pull` && `tom build` && `tom install`
   action: pull build install
 ```
+
+### path
+
+Tomtit project path. Optional. 
+
+Either:
+
+* file path
+
+Sets local directory path with Tomtit project:
+
+```yaml
+path: ~/projects/r3
+```
+
+Or:
+
+* git repo
+
+Sets git repository with Tomtit project
+
+```
+path: git@github.com:melezhik/r3tool.git
+```
+
+### crontab
+
+Should represents crontab entry (how often and when to run a project), should
+follow [Sparky crontab format](https://github.com/melezhik/sparky#run-by-cron).
+Optional. If not set, implies manual run.
  
 ### options
 
@@ -164,7 +187,7 @@ See project job vars. Optional
 
 Nested dependencies are allowed, so a dependency might have another dependency, so on.
 
-Just be cautious about cycles. This should be directed acycling dependency graph.
+Just be cautious about cycles. This should be directed acycling graph of dependencies.
  
 # Configuration file example
 
