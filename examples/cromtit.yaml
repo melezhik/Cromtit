@@ -1,3 +1,4 @@
+# list of Tomtit projects
 projects:
   rakudo:
     path: ~/projects/rakudo
@@ -5,12 +6,8 @@ projects:
     path: ~/projects/r3tool
     #crontab: "30 * * * *"
     action: pull html-report
-    options: --no_index_update
-    vars:
-      ISSUE: 1415
+    options: --no_index_update --dump_task
     before:
       -
         name: rakudo
-        action: pull
-        vars:
-          foo: 1
+        action: pull install 
