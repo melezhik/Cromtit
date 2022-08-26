@@ -99,8 +99,8 @@ action: install
 Multiple actions could be set as a space separated string:
 
 ```yaml
-  # will trigger `tom pull` && `tom build` && `tom install`
-  action: pull build install
+# will trigger `tom pull` && `tom build` && `tom install`
+action: pull build install
 ```
 
 ### path
