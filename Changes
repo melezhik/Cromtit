@@ -2,6 +2,8 @@ Revision history for Cromtit
 
 {{$NEXT}}
 
+    Introducing git based projects 
+
 0.0.4 2022-08-18T23:05:00Z
 
     Minor fix in report format
@@ -12,7 +14,7 @@ Revision history for Cromtit
     
 0.0.2 2022-08-18T19:30:00Z
 
-    Refine documenation
+    Refine documentation
 
 0.0.1 2022-08-18T19:30:00Z
 
