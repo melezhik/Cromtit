@@ -135,8 +135,8 @@ Optional. If not set, implies manual run.
 
 
 ```yaml
-    # run every 10 minutes
-    crontab: "*/10 * * * *"
+# run every 10 minutes
+crontab: "*/10 * * * *"
 ```
 
 ### options
