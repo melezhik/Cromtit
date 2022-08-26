@@ -93,6 +93,9 @@ Key should define a unique project name.
 
 Should define name of tomtit scenario that will be run. Optional.
 
+```yaml
+action: install
+```
 Multiple actions could be set as a space separated string:
 
 ```yaml
@@ -129,14 +132,33 @@ path: git@github.com:melezhik/r3tool.git
 Should represents crontab entry (how often and when to run a project), should
 follow [Sparky crontab format](https://github.com/melezhik/sparky#run-by-cron).
 Optional. If not set, implies manual run.
- 
+
+
+```yaml
+    # run every 10 minutes
+    crontab: "*/10 * * * *"
+```
+
 ### options
 
 Tomtit cli options. Optional
 
+```yaml
+options: --dump_task --verbose
+```
+
 ### vars
 
 Additional environment variables get passed to a job. Optional
+
+```yaml
+vars:
+  # don't pass creds
+  # as clear text
+  user: admin
+  password: SecRet123
+
+```
 
 ## Job Dependencies
 
