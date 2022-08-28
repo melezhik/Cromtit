@@ -164,7 +164,9 @@ vars:
 
 ### hosts
 
-Cron jobs could be run on specific hosts:
+By default jobs get run on localhost. 
+
+To run jobs on specific hosts in parallel, use `hosts` list:
 
 ```yaml
 projects:
@@ -221,11 +223,15 @@ Project name. Required
 
 ### action
 
-See project job action. Optional
+Override project job action. Optional. See project action specification.
 
 ### vars
 
-See project job vars. Optional
+Override project job vars. Optional. See project vars specification.
+
+## hosts
+
+Override project job hosts. Optional. See project hosts specification.
 
 ## Nested Dependencies
 
