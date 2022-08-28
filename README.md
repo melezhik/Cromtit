@@ -20,6 +20,8 @@ Cromtit =  Crontab + Tomtit
 
 * Asynchronous jobs queue 
 
+* Distributed jobs
+
 * Throttling to protect a system from overload (TBD)
 
 * View job logs and reports via cro app web interface
@@ -159,6 +161,26 @@ vars:
   password: SecRet123
 
 ```
+
+### hosts
+
+Cron jobs could be run on specific hosts:
+
+```yaml
+projects:
+  system-update:
+    path: ~/project/system-update
+    options: update
+  # runs `tom update` on every host
+  # in parallel
+  hosts:
+    - https://192.168.0.1 
+    - https://192.168.0.2 
+    - https://192.168.0.3
+```
+
+Hosts list should contain a list of Sparky API URLs 
+and hosts need to be a part of the same [Sparky cluster](https://github.com/melezhik/sparky#cluster-jobs).
 
 ## Job Dependencies
 
