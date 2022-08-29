@@ -260,7 +260,7 @@ Just be cautious about cycles. This should be directed acycling graph of depende
 
 Options:
 
-## -c
+## --conf
 
 Path to cromtit configuration file to apply. Optional. Default value is `~/cromtit.yaml`
 
