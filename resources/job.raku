@@ -53,8 +53,43 @@ class Pipeline does Sparky::JobApi::Role {
 
       }
 
-      self!job-run: :$action,:$options,:$envvars,:$path;
+      if config()<projects>{$.cromt-project}<hosts> {
 
+          my @jobs;
+
+          for config()<projects>{$.cromt-project}<hosts> -> $host {
+
+            my $api = $host<url>;
+
+            my $job = self.new-job: :$api;
+
+            say "trigger job on host: {$api}";
+
+            if $host<vars> {
+              say "save job vars ...";    
+              $job.put-stash({ vars => $host<vars> });
+            } else {
+              say "save job vars ...";    
+              $job.put-stash({ vars => $envvars });
+            }
+
+            $job.queue: %(
+              description => "(d) {$.cromt-project} [job run]",
+              tags => %(
+                stage => "run",
+                cromt-project => $.cromt-project,
+                action => $action,
+                options => $options
+              )
+            );
+
+            @jobs.push: $job;
+
+          }
+      } else {
+        self!job-run: :$action,:$options,:$envvars,:$path;
+      }
+ 
       if config()<projects>{$.cromt-project}<after> {
 
         my @jobs = self!run-job-dependency(config()<projects>{$.cromt-project}<after>);
@@ -88,6 +123,9 @@ class Pipeline does Sparky::JobApi::Role {
             say "trigger job on host: {$api}";
 
             if $host<vars> {
+              say "save job vars ...";    
+              $job.put-stash({ vars => $host<vars> });
+            } elsif $j<vars> {
               say "save job vars ...";    
               $job.put-stash({ vars => $j<vars> });
             }
