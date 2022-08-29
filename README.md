@@ -253,7 +253,17 @@ Override project job hosts. Optional. See project hosts specification.
 Nested dependencies are allowed, so a dependency might have another dependency, so on.
 
 Just be cautious about cycles. This should be directed acycling graph of dependencies.
- 
+
+# cromt cli
+
+`cromt` is a Cromtit cli.
+
+Options:
+
+## -c
+
+Path to cromtit configuration file to apply. Optional. Default value is `~/cromtit.yaml`
+
 # Configuration file example
 
 You can find a configuration file example at `examples/` directory
