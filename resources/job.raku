@@ -55,11 +55,13 @@ class Pipeline does Sparky::JobApi::Role {
 
       }
 
-      if $.resolve-hosts eq "yes" && config()<projects>{$.cromt-project}<hosts> {
+      if $.resolve-hosts eq "yes" && config()<projects>{$.cromt-project}<hosts><> {
 
           my @jobs;
 
-          for config()<projects>{$.cromt-project}<hosts> -> $host {
+          say "stage-run - handle hosts: ", config()<projects>{$.cromt-project}<hosts><>.perl;
+
+          for config()<projects>{$.cromt-project}<hosts><> -> $host {
 
             my $api = $host<url>;
 
@@ -76,7 +78,7 @@ class Pipeline does Sparky::JobApi::Role {
             }
 
             $job.queue: %(
-              description => "(d) {$.cromt-project} [job run]",
+              description => "(h) {$.cromt-project} [job run]",
               tags => %(
                 stage => "run",
                 cromt-project => $.cromt-project,
@@ -123,7 +125,9 @@ class Pipeline does Sparky::JobApi::Role {
 
         if $.resolve-hosts eq "yes" and $j<hosts> {
 
-          for $j<hosts> -> $host {
+          say "run-job-dependency - handle hosts: ", $j<hosts><>.perl;
+
+          for $j<hosts><> -> $host {
 
             my $api = $host<url>;
 
@@ -140,7 +144,7 @@ class Pipeline does Sparky::JobApi::Role {
             }
 
             $job.queue: %(
-              description => "(d) {$cromt-project} [job run]",
+              description => "(dh) {$cromt-project} [job run]",
               tags => %(
                 stage => "run",
                 cromt-project => $cromt-project,
