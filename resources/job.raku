@@ -8,6 +8,8 @@ class Pipeline does Sparky::JobApi::Role {
 
   has Str $.options = tags()<options> || config()<projects>{$!cromt-project}<options> || "--verbose";
 
+  has Str $.resolve-hosts = tags()<resolve-hosts> || "yes";
+
     method stage-main {
 
       my $j = self.new-job;
@@ -53,7 +55,7 @@ class Pipeline does Sparky::JobApi::Role {
 
       }
 
-      if config()<projects>{$.cromt-project}<hosts> {
+      if $.resolve-hosts eq "yes" && config()<projects>{$.cromt-project}<hosts> {
 
           my @jobs;
 
@@ -79,11 +81,18 @@ class Pipeline does Sparky::JobApi::Role {
                 stage => "run",
                 cromt-project => $.cromt-project,
                 action => $action,
-                options => $options
+                options => $options,
+                resolve-hosts => "no",
               )
             );
 
             @jobs.push: $job;
+
+            say "waiting for hosts jobs have finsihed ...";
+
+            my $st = self.wait-jobs(@jobs);
+
+            die $st.perl unless $st<OK>;
 
           }
       } else {
@@ -112,7 +121,7 @@ class Pipeline does Sparky::JobApi::Role {
   
         my $cromt-project = $j<name>;
 
-        if $j<hosts> {
+        if $.resolve-hosts eq "yes" and $j<hosts> {
 
           for $j<hosts> -> $host {
 
@@ -136,7 +145,9 @@ class Pipeline does Sparky::JobApi::Role {
                 stage => "run",
                 cromt-project => $cromt-project,
                 action => $j<action>,
-                options => $j<options>
+                options => $j<options>,
+                resolve-hosts => "off",
+              
               )
             );
 
