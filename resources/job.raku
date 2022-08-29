@@ -89,7 +89,7 @@ class Pipeline does Sparky::JobApi::Role {
             );
 
             @jobs.push: $job;
-            
+
           }
 
           say "waiting for hosts jobs have finsihed ...";
@@ -201,7 +201,7 @@ class Pipeline does Sparky::JobApi::Role {
         say ">> run job path={$path} action={$act} options={$options} envvars={$envvars.perl}";
         my $eff-path = $path;
         if $path ~~ /^^ 'git@' / {
-          directory-delete "scm";
+          #directory-delete "scm";
           directory "scm";
           git-scm $path, %( to => "scm" );
           $eff-path = "{$*CWD}/scm";
