@@ -176,9 +176,12 @@ projects:
   # runs `tom update` on every host
   # in parallel
   hosts:
-    - url: https://192.168.0.1 
-    - url: https://192.168.0.2 
-    - url: https://192.168.0.3
+    - 
+      url: https://192.168.0.1 
+    - 
+      url: https://192.168.0.2 
+    - 
+      url: https://192.168.0.3
 ```
 
 Hosts list should contain a list of Sparky API URLs 
@@ -188,13 +191,16 @@ Optionally every host could override vars:
 
 ```yaml
   hosts:
-    - url: https://192.168.0.1
+    - 
+      url: https://192.168.0.1
       vars:
         WORKER: 1 
-    - url: https://192.168.0.2 
+    - 
+      url: https://192.168.0.2 
       vars:
         WORKER: 2 
-    - url: https://192.168.0.3
+    - 
+      url: https://192.168.0.3
       vars:
         WORKER: 3
 ```
