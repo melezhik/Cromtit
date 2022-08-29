@@ -77,24 +77,59 @@ class Pipeline does Sparky::JobApi::Role {
   
         my $cromt-project = $j<name>;
 
-        my $job = self.new-job;
+        if $j<hosts> {
 
-        if $j<vars> {
-          say "save job vars ...";    
-          $job.put-stash({ vars => $j<vars> });
+          for $j<hosts> -> $host {
+
+            my $api = $host<url>;
+
+            my $job = self.new-job: :$api;
+
+            say "trigger job on host: {$api}";
+
+            if $host<vars> {
+              say "save job vars ...";    
+              $job.put-stash({ vars => $j<vars> });
+            }
+
+            $job.queue: %(
+              description => "(d) {$cromt-project} [job run]",
+              tags => %(
+                stage => "run",
+                cromt-project => $cromt-project,
+                action => $j<action>,
+                options => $j<options>
+              )
+            );
+
+            @jobs.push: $job;
+
+          }    
+        } else {
+
+          my $job = self.new-job;
+
+          say "trigger job on host: localhost";
+
+          if $j<vars> {
+            say "save job vars ...";    
+            $job.put-stash({ vars => $j<vars> });
+          }
+
+          $job.queue: %(
+            description => "(d) {$cromt-project} [job run]",
+            tags => %(
+              stage => "run",
+              cromt-project => $cromt-project,
+              action => $j<action>,
+              options => $j<options>
+            )
+          );
+
+          @jobs.push: $job;
+
         }
 
-        $job.queue: %(
-          description => "(d) {$cromt-project} [job run]",
-          tags => %(
-            stage => "run",
-            cromt-project => $cromt-project,
-            action => $j<action>,
-            options => $j<options>
-          )
-        );
-
-        @jobs.push: $job;
       }
 
       return @jobs;

@@ -176,13 +176,28 @@ projects:
   # runs `tom update` on every host
   # in parallel
   hosts:
-    - https://192.168.0.1 
-    - https://192.168.0.2 
-    - https://192.168.0.3
+    - url: https://192.168.0.1 
+    - url: https://192.168.0.2 
+    - url: https://192.168.0.3
 ```
 
 Hosts list should contain a list of Sparky API URLs 
 and hosts need to be a part of the same [Sparky cluster](https://github.com/melezhik/sparky#cluster-jobs).
+
+Optionally every host could override vars:
+
+```yaml
+  hosts:
+    - url: https://192.168.0.1
+      vars:
+        WORKER: 1 
+    - url: https://192.168.0.2 
+      vars:
+        WORKER: 2 
+    - url: https://192.168.0.3
+      vars:
+        WORKER: 3
+```
 
 ## Job Dependencies
 
