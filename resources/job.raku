@@ -89,14 +89,15 @@ class Pipeline does Sparky::JobApi::Role {
             );
 
             @jobs.push: $job;
-
-            say "waiting for hosts jobs have finsihed ...";
-
-            my $st = self.wait-jobs(@jobs);
-
-            die $st.perl unless $st<OK>;
-
+            
           }
+
+          say "waiting for hosts jobs have finsihed ...";
+
+          my $st = self.wait-jobs(@jobs);
+
+          die $st.perl unless $st<OK>;
+
       } else {
         self!job-run: :$action,:$options,:$envvars,:$path;
       }
