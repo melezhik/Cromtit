@@ -250,7 +250,7 @@ Override project job action. Optional. See project action specification.
 
 Override project job vars. Optional. See project vars specification.
 
-## hosts
+### hosts
 
 Override project job hosts. Optional. See project hosts specification.
 
