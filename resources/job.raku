@@ -211,8 +211,6 @@ class Pipeline does Sparky::JobApi::Role {
 
     method !job-run (:$action,:$options,:$envvars,:$path) {
 
-      my $af-dir  = $path ~~ /^^ 'git@' / ?? "scm/.artifacts" !! ".artifacts";
-
       my $eff-path;
 
       if $path ~~ /^^ 'git@' / {
@@ -227,12 +225,13 @@ class Pipeline does Sparky::JobApi::Role {
       my $log-file = "{$*CWD}/job.log";
       my $status-file = "{$*CWD}/job.status.log";
 
+      directory "{$eff-path}/.artifacts";
+
       if config()<projects>{$.cromt-project}<artifacts> && config()<projects>{$.cromt-project}<artifacts><in> {
         my $job = self.new-job: job-id => $.storage_job_id, project => $.storage_project, api => $.storage_api;
-        directory $af-dir;
         for config()<projects>{$.cromt-project}<artifacts><in><> -> $f {
-          say "copy artifact $f from storage to {$af-dir}/";
-          "{$af-dir}/{$f}".IO.spurt($job.get-file($f),:bin);
+          say "copy artifact $f from storage to {$eff-path}/.artifacts/";
+          "{$eff-path}/.artifacts/{$f}".IO.spurt($job.get-file($f),:bin);
         }
       } 
 
@@ -257,10 +256,9 @@ class Pipeline does Sparky::JobApi::Role {
 
         if config()<projects>{$.cromt-project}<artifacts> && config()<projects>{$.cromt-project}<artifacts><out> {
           my $job = self.new-job: job-id => $.storage_job_id, project => $.storage_project, api => $.storage_api;
-          directory ".artifacts";
           for config()<projects>{$.cromt-project}<artifacts><out><> -> $f {
             say "copy artifact {$f<file>} to storage";
-            $job.put-file("{$af-dir}/{$f<path>}",$f<file>);
+            $job.put-file("{$eff-path}/{$f<path>}",$f<file>);
           }
         } 
 
