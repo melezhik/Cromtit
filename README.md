@@ -260,6 +260,45 @@ Nested dependencies are allowed, so a dependency might have another dependency, 
 
 Just be cautious about cycles. This should be directed acycling graph of dependencies.
 
+# Artifacts
+
+Jobs can share artifacts with each other:
+
+```yaml
+
+projects:
+  fastspec-build
+    path: git@github.com:melezhik/fastspec.git
+    action: build-rakudo
+    artifacts:
+      out:
+        rakudo:
+          .build/rakudo.tar.gz
+  fastspec-test:
+    path: git@github.com:melezhik/fastspec.git
+    action: spectest
+    after:
+      -
+        name: fastspec-build
+    artifacts:
+      in:
+        rakudo:
+          .build/rakudo.tar.gz  
+    hosts:
+      -
+        url: https://sparrowhub.io:4000
+        vars:
+          WORKER: 1
+      -
+        url: https://192.168.0.3:4001
+        vars:
+          WORKER: 2
+      -
+        url: http://127.0.0.1:4000
+        vars:
+          WORKER: 3
+```
+
 # cromt cli
 
 `cromt` is a Cromtit cli.
