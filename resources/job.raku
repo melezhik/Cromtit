@@ -10,10 +10,20 @@ class Pipeline does Sparky::JobApi::Role {
 
   has Str $.resolve-hosts = tags()<resolve-hosts> || "yes";
 
+  has Str $.storage_project = tags()<storage_project> || "";
+
+  has Str $.storage_job_id = tags()<storage_job_id> || "";
+
+  has Str $.storage_api = config()<storage> || "http://127.0.0.1:4000";
+
     method stage-main {
 
       my $j = self.new-job;
-  
+
+      my $storage = self.new-job: api => $.storage_api;  
+
+      my %storage = $storage.info();
+
       $j.queue: %(
         description => "{tags()<SPARKY_PROJECT>} [job run]",
         tags => %(
@@ -21,6 +31,8 @@ class Pipeline does Sparky::JobApi::Role {
           cromt-project => $.cromt-project,
           action => $.action,
           options => $.options,
+          storage_project => %storage<project>,
+          storage_job => %storage<job-id>,
         )
       );
 
@@ -85,6 +97,8 @@ class Pipeline does Sparky::JobApi::Role {
                 action => $action,
                 options => $options,
                 resolve-hosts => "no",
+                storage_project => $.storage_project,
+                storage_job => $.storage_job,
               )
             );
 
@@ -152,6 +166,8 @@ class Pipeline does Sparky::JobApi::Role {
                 action => $j<action>,
                 options => $j<options>,
                 resolve-hosts => "off",
+                storage_project => $.storage_project,
+                storage_job => $.storage_job,
               
               )
             );
@@ -176,7 +192,10 @@ class Pipeline does Sparky::JobApi::Role {
               stage => "run",
               cromt-project => $cromt-project,
               action => $j<action>,
-              options => $j<options>
+              options => $j<options>,
+              storage_project => $.storage_project,
+              storage_job => $.storage_job,
+
             )
           );
 
@@ -191,6 +210,15 @@ class Pipeline does Sparky::JobApi::Role {
     }
 
     method !job-run (:$action,:$options,:$envvars,:$path) {
+
+      if config()<projects>{$.cromt-project}<artifacts> && config()<projects>{$.cromt-project}<artifacts><in> {
+        my $job = self.new-job: job-id => $.storage_job, project => $.storage_project, api => $.storage_api;
+        directory ".artifacts";
+        for config()<projects>{$.cromt-project}<artifacts><in> -> $f {
+          say "copy $f from storage";
+          ".artifacts/$f".IO.spurt($job.get-file($f),:bin);
+        }
+      } 
 
       for $action.split(/\s+/) -> $act {  
 
@@ -220,6 +248,15 @@ class Pipeline does Sparky::JobApi::Role {
         # copy($log-file,"{%*ENV<HOME>}/.cromtit/reports/{$job-id}/{$log-file.IO.basename}");
 
         # copy($status-file,"{%*ENV<HOME>}/.cromtit/reports/{$job-id}/{$status-file.IO.basename}");
+
+        if config()<projects>{$.cromt-project}<artifacts> && config()<projects>{$.cromt-project}<artifacts><out> {
+          my $job = self.new-job: job-id => $.storage_job, project => $.storage_project, api => $.storage_api;
+          directory ".artifacts";
+          for config()<projects>{$.cromt-project}<artifacts><out> -> $f {
+            say "copy {$f<file>} to storage";
+            $job.put-file($f<path>,$f<file>);
+          }
+        } 
 
       }
     }

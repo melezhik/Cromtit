@@ -265,15 +265,15 @@ Just be cautious about cycles. This should be directed acycling graph of depende
 Jobs can share artifacts with each other:
 
 ```yaml
-
 projects:
-  fastspec-build
+  fastspec-build:
     path: git@github.com:melezhik/fastspec.git
     action: build-rakudo
     artifacts:
       out:
-        rakudo:
-          .build/rakudo.tar.gz
+        -
+          file: rakudo.tar.gz:
+          path: .build/rakudo.tar.gz
   fastspec-test:
     path: git@github.com:melezhik/fastspec.git
     action: spectest
@@ -282,8 +282,7 @@ projects:
         name: fastspec-build
     artifacts:
       in:
-        rakudo:
-          .build/rakudo.tar.gz  
+        - rakudo.tar.gz  
     hosts:
       -
         url: https://sparrowhub.io:4000
@@ -298,6 +297,10 @@ projects:
         vars:
           WORKER: 3
 ```
+
+In this example dependency job `fastspec-build` copies file `.build/rakudo.tar.gz` into _internal storage_
+so that dependent job `fastspec-test` would access it. The file will be located within tomtit scenario at
+`.artifacts/rakudo.tar.gz` path
 
 # cromt cli
 
