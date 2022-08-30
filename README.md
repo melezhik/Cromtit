@@ -300,7 +300,7 @@ projects:
 
 In this example dependency job `fastspec-build` copies file `.build/rakudo.tar.gz` into _internal storage_
 so that dependent job `fastspec-test` would access it. The file will be located within tomtit scenario at
-`.artifacts/rakudo.tar.gz` path
+`.artifacts/rakudo.tar.gz` path.
 
 # cromt cli
 

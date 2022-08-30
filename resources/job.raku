@@ -32,7 +32,7 @@ class Pipeline does Sparky::JobApi::Role {
           action => $.action,
           options => $.options,
           storage_project => %storage<project>,
-          storage_job => %storage<job-id>,
+          storage_job_id => %storage<job-id>,
         )
       );
 
@@ -98,7 +98,7 @@ class Pipeline does Sparky::JobApi::Role {
                 options => $options,
                 resolve-hosts => "no",
                 storage_project => $.storage_project,
-                storage_job => $.storage_job,
+                storage_job_id => $.storage_job_id,
               )
             );
 
@@ -167,7 +167,7 @@ class Pipeline does Sparky::JobApi::Role {
                 options => $j<options>,
                 resolve-hosts => "off",
                 storage_project => $.storage_project,
-                storage_job => $.storage_job,
+                storage_job_id => $.storage_job_id,
               
               )
             );
@@ -194,7 +194,7 @@ class Pipeline does Sparky::JobApi::Role {
               action => $j<action>,
               options => $j<options>,
               storage_project => $.storage_project,
-              storage_job => $.storage_job,
+              storage_job_id => $.storage_job_id,
 
             )
           );
@@ -212,7 +212,7 @@ class Pipeline does Sparky::JobApi::Role {
     method !job-run (:$action,:$options,:$envvars,:$path) {
 
       if config()<projects>{$.cromt-project}<artifacts> && config()<projects>{$.cromt-project}<artifacts><in> {
-        my $job = self.new-job: job-id => $.storage_job, project => $.storage_project, api => $.storage_api;
+        my $job = self.new-job: job-id => $.storage_job_id, project => $.storage_project, api => $.storage_api;
         directory ".artifacts";
         for config()<projects>{$.cromt-project}<artifacts><in> -> $f {
           say "copy $f from storage";
@@ -250,7 +250,7 @@ class Pipeline does Sparky::JobApi::Role {
         # copy($status-file,"{%*ENV<HOME>}/.cromtit/reports/{$job-id}/{$status-file.IO.basename}");
 
         if config()<projects>{$.cromt-project}<artifacts> && config()<projects>{$.cromt-project}<artifacts><out> {
-          my $job = self.new-job: job-id => $.storage_job, project => $.storage_project, api => $.storage_api;
+          my $job = self.new-job: job-id => $.storage_job_id, project => $.storage_project, api => $.storage_api;
           directory ".artifacts";
           for config()<projects>{$.cromt-project}<artifacts><out> -> $f {
             say "copy {$f<file>} to storage";
