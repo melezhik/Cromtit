@@ -10,6 +10,8 @@ class Pipeline does Sparky::JobApi::Role {
 
   has Str $.resolve-hosts = tags()<resolve-hosts> || "yes";
 
+  has Str $.resolve-deps = tags()<resolve-deps> || "yes";
+
   has Str $.storage_project = tags()<storage_project> || "";
 
   has Str $.storage_job_id = tags()<storage_job_id> || "";
@@ -56,11 +58,12 @@ class Pipeline does Sparky::JobApi::Role {
 
       my $path = config()<projects>{$.cromt-project}<path>;
 
-      if config()<projects>{$.cromt-project}<before> {
+      if $.resolve-deps eq "yes" and config()<projects>{$.cromt-project}<before> {
 
         my @jobs = self!run-job-dependency(config()<projects>{$.cromt-project}<before>);
 
         say "waiting for dependencies jobs have finsihed ...";
+
         my $st = self.wait-jobs(@jobs);
 
         die $st.perl unless $st<OK>;
@@ -97,6 +100,7 @@ class Pipeline does Sparky::JobApi::Role {
                 action => $action,
                 options => $options,
                 resolve-hosts => "no",
+                resolve-deps => "no",
                 storage_project => $.storage_project,
                 storage_job_id => $.storage_job_id,
               )
@@ -116,7 +120,7 @@ class Pipeline does Sparky::JobApi::Role {
         self!job-run: :$action,:$options,:$envvars,:$path;
       }
  
-      if config()<projects>{$.cromt-project}<after> {
+      if $.resolve-deps eq "yes" and config()<projects>{$.cromt-project}<after> {
 
         my @jobs = self!run-job-dependency(config()<projects>{$.cromt-project}<after>);
 
