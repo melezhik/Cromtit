@@ -22,6 +22,8 @@ Cromtit =  Crontab + Tomtit
 
 * Distributed jobs
 
+* Shared jobs artifacts
+
 * Throttling to protect a system from overload (TBD)
 
 * View job logs and reports via cro app web interface
