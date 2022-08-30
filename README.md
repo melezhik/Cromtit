@@ -274,7 +274,7 @@ projects:
     artifacts:
       out:
         -
-          file: rakudo.tar.gz:
+          file: rakudo.tar.gz
           path: .build/rakudo.tar.gz
   fastspec-test:
     path: git@github.com:melezhik/fastspec.git
