@@ -211,9 +211,24 @@ class Pipeline does Sparky::JobApi::Role {
 
     method !job-run (:$action,:$options,:$envvars,:$path) {
 
+      my $af-dir  = $path ~~ /^^ 'git@' / ?? "scm/.artifacts" !! ".artifacts";
+
+      my $eff-path;
+
+      if $path ~~ /^^ 'git@' / {
+        directory-delete "scm";
+        directory "scm";
+        git-scm $path, %( to => "scm" );
+        $eff-path = "{$*CWD}/scm";
+      } else {
+        $eff-path = $path.subst(/^ '~' "/" /,"{%*ENV<HOME>}/");
+      }
+
+      my $log-file = "{$*CWD}/job.log";
+      my $status-file = "{$*CWD}/job.status.log";
+
       if config()<projects>{$.cromt-project}<artifacts> && config()<projects>{$.cromt-project}<artifacts><in> {
         my $job = self.new-job: job-id => $.storage_job_id, project => $.storage_project, api => $.storage_api;
-        my $af-dir  = $path ~~ /^^ 'git@' / ?? "scm/.artifacts" !! ".artifacts";
         directory $af-dir;
         for config()<projects>{$.cromt-project}<artifacts><in><> -> $f {
           say "copy artifact $f from storage to {$af-dir}/";
@@ -223,23 +238,13 @@ class Pipeline does Sparky::JobApi::Role {
 
       for $action.split(/\s+/) -> $act {  
 
-        my $log-file = "{$*CWD}/job.log";
-        my $status-file = "{$*CWD}/job.status.log";
-        my $effective-path = $path.subst(/^ '~' "/" /,"{%*ENV<HOME>}/");
-
         say ">> run job path={$path} action={$act} options={$options} envvars={$envvars.perl}";
-        my $eff-path = $path;
-        if $path ~~ /^^ 'git@' / {
-          #directory-delete "scm";
-          directory "scm";
-          git-scm $path, %( to => "scm" );
-          $eff-path = "{$*CWD}/scm";
-        }
         bash qq:to/HERE/, %( cwd => $eff-path, envvars => $envvars, description => "tomtit job"  );
           #tom $options $act 1>$log-file 2>$log-file
           #echo \$? > $status-file
           SP6_LOG_NO_TIMESTAMPS=1 tom $options $act
         HERE
+
         # my $job-id = now.Int;
 
         # mkdir "{%*ENV<HOME>}/.cromtit/reports/{$job-id}";
@@ -255,7 +260,7 @@ class Pipeline does Sparky::JobApi::Role {
           directory ".artifacts";
           for config()<projects>{$.cromt-project}<artifacts><out><> -> $f {
             say "copy artifact {$f<file>} to storage";
-            $job.put-file($f<path>,$f<file>);
+            $job.put-file("{$af-dir}/{$f<path>}",$f<file>);
           }
         } 
 
