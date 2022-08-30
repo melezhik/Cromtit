@@ -304,6 +304,17 @@ In this example dependency job `fastspec-build` copies file `.build/rakudo.tar.g
 so that dependent job `fastspec-test` would access it. The file will be located within tomtit scenario at
 `.artifacts/rakudo.tar.gz` path.
 
+## Dedicated storage server
+
+Sometimes when hosts do not see each other directly (for example when some jobs get run on localhost ) 
+a dedicated storage server could be an option, ensuring artifacts get copied and read from publicly accessed
+Sparky API instance:
+
+
+```yaml
+storage: https://sparrowhub.io:4000
+```
+
 # cromt cli
 
 `cromt` is a Cromtit cli.
