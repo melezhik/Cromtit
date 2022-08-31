@@ -242,6 +242,7 @@ class Pipeline does Sparky::JobApi::Role {
       for $action.split(/\s+/) -> $act {  
 
         say ">> run job path={$path} action={$act} options={$options} envvars={$envvars.perl}";
+        
         bash qq:to/HERE/, %( cwd => $eff-path, envvars => $envvars, description => "tomtit job"  );
           #tom $options $act 1>$log-file 2>$log-file
           #echo \$? > $status-file
@@ -258,15 +259,16 @@ class Pipeline does Sparky::JobApi::Role {
 
         # copy($status-file,"{%*ENV<HOME>}/.cromtit/reports/{$job-id}/{$status-file.IO.basename}");
 
-        if config()<projects>{$.cromt-project}<artifacts> && config()<projects>{$.cromt-project}<artifacts><out> {
-          my $job = self.new-job: job-id => $.storage_job_id, project => $.storage_project, api => $.storage_api;
-          for config()<projects>{$.cromt-project}<artifacts><out><> -> $f {
-            say "copy artifact {$f<file>} to storage";
-            $job.put-file("{$eff-path}/{$f<path>}",$f<file>);
-          }
-        } 
-
       }
+
+      if config()<projects>{$.cromt-project}<artifacts> && config()<projects>{$.cromt-project}<artifacts><out> {
+        my $job = self.new-job: job-id => $.storage_job_id, project => $.storage_project, api => $.storage_api;
+        for config()<projects>{$.cromt-project}<artifacts><out><> -> $f {
+          say "copy artifact {$f<file>} to storage";
+          $job.put-file("{$eff-path}/{$f<path>}",$f<file>);
+        }
+      } 
+
     }
 
   }
