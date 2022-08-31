@@ -2,6 +2,8 @@ Revision history for Cromtit
 
 {{$NEXT}}
 
+    Support of https schemes for git based projects
+
 0.0.7 2022-08-30T19:33:00Z
 
     Jobs artifacts

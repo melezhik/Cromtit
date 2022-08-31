@@ -217,7 +217,7 @@ class Pipeline does Sparky::JobApi::Role {
 
       my $eff-path;
 
-      if $path ~~ /^^ 'git@' / {
+      if $path ~~ /^^ 'git@' || 'https://' / {
         directory-delete "scm";
         directory "scm";
         git-scm $path, %( to => "scm" );

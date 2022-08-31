@@ -131,6 +131,12 @@ Sets git repository with Tomtit project
 path: git@github.com:melezhik/r3tool.git
 ```
 
+One can use either `git@` or `https://` schemes for git urls:
+
+```yaml
+path: https://github.com/melezhik/r3tool.git
+```
+
 ### crontab
 
 Should represents crontab entry (how often and when to run a project), should
