@@ -106,8 +106,8 @@ class Pipeline does Sparky::JobApi::Role {
                 resolve-deps => "no",
                 storage_project => $.storage_project,
                 storage_job_id => $.storage_job_id,
-                sparrowdo => $host<sparrowdo> || $.sparrowdo
-              )
+              ),
+              sparrowdo => $host<sparrowdo> || $.sparrowdo
             );
 
             @jobs.push: $job;
