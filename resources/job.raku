@@ -18,6 +18,8 @@ class Pipeline does Sparky::JobApi::Role {
 
   has Str $.storage_api = config()<storage> || "http://127.0.0.1:4000";
 
+  has Hash $.sparrowdo = config()<projects>{$!cromt-project}<sparrowdo> || {};
+
     method stage-main {
 
       my $j = self.new-job;
@@ -35,7 +37,8 @@ class Pipeline does Sparky::JobApi::Role {
           options => $.options,
           storage_project => %storage<project>,
           storage_job_id => %storage<job-id>,
-        )
+        ),
+        sparrowdo => $.sparrowdo
       );
 
       my $st = self.wait-job($j);
@@ -103,6 +106,7 @@ class Pipeline does Sparky::JobApi::Role {
                 resolve-deps => "no",
                 storage_project => $.storage_project,
                 storage_job_id => $.storage_job_id,
+                sparrowdo => $host<sparrowdo> || $.sparrowdo
               )
             );
 
@@ -152,6 +156,8 @@ class Pipeline does Sparky::JobApi::Role {
 
             my $job = self.new-job: :$api;
 
+            my $cp = config()<projects>{$cromt-project};
+
             say "trigger job on host: {$api}";
 
             if $host<vars> {
@@ -169,11 +175,11 @@ class Pipeline does Sparky::JobApi::Role {
                 cromt-project => $cromt-project,
                 action => $j<action>,
                 options => $j<options>,
-                resolve-hosts => "off",
+                resolve-hosts => "no",
                 storage_project => $.storage_project,
-                storage_job_id => $.storage_job_id,
-              
-              )
+                storage_job_id => $.storage_job_id,              
+              ),
+              sparrowdo => $host<sparrowdo> || $j<sparrowdo> || $cp<sparrowdo> || {},
             );
 
             @jobs.push: $job;
@@ -184,6 +190,8 @@ class Pipeline does Sparky::JobApi::Role {
           my $job = self.new-job;
 
           say "trigger job on host: localhost";
+
+          my $cp = config()<projects>{$cromt-project};
 
           if $j<vars> {
             say "save job vars ...";    
@@ -199,8 +207,8 @@ class Pipeline does Sparky::JobApi::Role {
               options => $j<options>,
               storage_project => $.storage_project,
               storage_job_id => $.storage_job_id,
-
-            )
+            ),
+            sparrowdo => $j<sparrowdo> || $cp<sparrowdo> || {}
           );
 
           @jobs.push: $job;

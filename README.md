@@ -169,6 +169,16 @@ vars:
   password: SecRet123
 
 ```
+### sparrowdo
+
+Override job sparrowdo configuation. For example:
+
+```yaml
+sparrowdo:
+  # run job in docker container
+  # named raku-apline-repo
+  docker: raku-apline-repo
+```
 
 ### hosts
 
@@ -211,6 +221,19 @@ Optionally every host could override vars:
       url: https://192.168.0.3
       vars:
         WORKER: 3
+```
+
+And sparrowdo configurations:
+
+```yaml
+  hosts:
+    - 
+      url: https://192.168.0.1
+      vars:
+        WORKER: 1 
+      sparrowdo:
+        docker: old_boy
+        bootstrap: true
 ```
 
 ## Job Dependencies
@@ -257,6 +280,10 @@ Override project job action. Optional. See project action specification.
 ### vars
 
 Override project job vars. Optional. See project vars specification.
+
+### sparrowdo
+
+Override project job sparrowdo configuration. Optional. See project sparrowdo configuration specification.
 
 ### hosts
 
