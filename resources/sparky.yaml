@@ -1,6 +1,6 @@
 sparrowdo:
   no_sudo: true
-  no_index_update: true
+  #no_index_update: true
   bootstrap: false
   format: default
   tags: stage=main,cromt-project=%cromt-project%
