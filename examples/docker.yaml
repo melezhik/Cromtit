@@ -4,4 +4,5 @@ projects:
     action: hello
     sparrowdo:
       docker: alpine
-
+      bootstrap: true
+      no_sudo: true
