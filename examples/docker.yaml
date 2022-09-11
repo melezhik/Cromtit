@@ -1,0 +1,7 @@
+projects:
+  docker:
+    path: https://github.com/melezhik/Cromtit.git
+    action: hello
+    sparrowdo:
+      docker: alpine
+
