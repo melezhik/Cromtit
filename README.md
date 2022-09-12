@@ -438,9 +438,13 @@ Sparky exposes a web UI to track projects, cron jobs and reports:
 
 http://127.0.0.1:4000
 
-# See also
+# Existing Cromit based projects
 
-* [Fastspec](https://github.com/melezhik/fastspec) - an example of Cromtit based project
+* [Fastspec](https://github.com/melezhik/fastspec)
+
+* [https://github.com/melezhik/fastspec](https://github.com/melezhik/rakusta)
+
+* [raku-alpine-repo](https://github.com/melezhik/raku-alpine-repo)
 
 # Thanks to
 
