@@ -341,6 +341,30 @@ In this example jobs are executed in 2 parallel queues:
 * hosts 192.168.0.1 - 192.168.0.3 are executed one by one in queue Q1
 * hosts 192.168.0.4 - 192.168.0.5 are executed one by one in queue Q2
 
+# Job description
+
+One can override standard job title appears in reports 
+by inserting `title` option into arbitrary level:
+
+```yaml
+  jobs:
+    hosts:
+      - 
+        title: jobA
+      - 
+        title: jobB
+      - 
+        title: jobC
+```
+
+This example runs the same job 3 times in parallel, with job titles appears in report list as:
+
+```
+jobA
+jobB
+jobC
+```
+
 # Artifacts
 
 Jobs can share artifacts with each other:
