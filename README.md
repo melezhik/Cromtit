@@ -171,7 +171,7 @@ vars:
 ```
 ### sparrowdo
 
-Override job sparrowdo configuation. For example:
+Override job sparrowdo configuration. For example:
 
 ```yaml
 sparrowdo:
@@ -294,6 +294,36 @@ Override project job hosts. Optional. See project hosts specification.
 Nested dependencies are allowed, so a dependency might have another dependency, so on.
 
 Just be cautious about cycles. This should be directed acycling graph of dependencies.
+
+# Job queues
+
+Jobs from `hosts` list executed in parallel, to enable sequential execution use `queue-id` option,
+jobs, with the _same_ `queue-id` are executed in the same queue and thus executed one by one:
+
+
+```yaml
+  hosts:
+    - 
+      url: https://192.168.0.1
+      queue-id: Q1
+    - 
+      url: https://192.168.0.2 
+      queue-id: Q1
+    - 
+      url: https://192.168.0.3
+      queue-id: Q1
+    - 
+      url: https://192.168.0.4
+      queue-id: Q2
+    - 
+      url: https://192.168.0.5
+      queue-id: Q2
+```
+
+In this example jobs are executed in 2 parallel queues:
+
+* hosts 192.168.0.1 - 192.168.0.3 are executed one by one in queue Q1
+* hosts 192.168.0.4 - 192.168.0.5 are executed one by one in queue Q2
 
 # Artifacts
 

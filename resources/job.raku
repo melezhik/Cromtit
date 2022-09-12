@@ -83,7 +83,7 @@ class Pipeline does Sparky::JobApi::Role {
 
             my $api = $host<url>;
 
-            my $job = self.new-job: :$api;
+            my $job = $host<queue-id> ?? self.new-job: :$api !! self.new-job: :$api, :project{$host<queue-id>};
 
             say "trigger job on host: {$api}";
 
@@ -154,7 +154,7 @@ class Pipeline does Sparky::JobApi::Role {
 
             my $api = $host<url>;
 
-            my $job = self.new-job: :$api;
+            my $job = $host<queue-id> ?? self.new-job: :$api !! self.new-job: :$api, :project{$host<queue-id>};
 
             my $cp = config()<projects>{$cromt-project};
 
