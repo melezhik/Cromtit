@@ -2,6 +2,11 @@ Revision history for Cromtit
 
 {{$NEXT}}
 
+0.0.11 2022-09-12T16:40:00Z
+
+    Sequential jobs (named queues)
+    Job titles
+
 0.0.10 2022-09-08T13:40:00Z
 
     Don't include `no_index_update` into
