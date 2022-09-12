@@ -81,11 +81,16 @@ class Pipeline does Sparky::JobApi::Role {
 
           for config()<projects>{$.cromt-project}<hosts><> -> $host {
 
-            my $api = $host<url>;
+            my $job;
 
-            my $job = $host<queue-id> ?? self.new-job: :$api !! self.new-job: :$api, :project{$host<queue-id>};
-
-            say "trigger job on host: {$api}";
+            if $host<url> {
+                my $api = $host<url>;
+                $job = $host<queue-id> ?? self.new-job: :$api !! self.new-job: :$api, :project{$host<queue-id>};
+                say "trigger job on host: {$api}";
+            } else {
+                $job = $host<queue-id> ?? self.new-job !! self.new-job: :project{$host<queue-id>};
+                say "trigger job on host: localhost";
+            }
 
             if $host<vars> {
               say "save job vars ...";    
