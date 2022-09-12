@@ -85,10 +85,10 @@ class Pipeline does Sparky::JobApi::Role {
 
             if $host<url> {
                 my $api = $host<url>;
-                $job = $host<queue-id> ?? self.new-job: :$api !! self.new-job: :$api, :project{$host<queue-id>};
+                $job = $host<queue-id> ?? self.new-job: :$api, :project{$host<queue-id>} !! self.new-job: :$api;
                 say "trigger job on host: {$api}";
             } else {
-                $job = $host<queue-id> ?? self.new-job !! self.new-job: :project{$host<queue-id>};
+                $job = $host<queue-id> ?? self.new-job: :project{$host<queue-id>} !! self.new-job;
                 say "trigger job on host: localhost";
             }
 
@@ -169,10 +169,10 @@ class Pipeline does Sparky::JobApi::Role {
 
             if $host<url> {
                 my $api = $host<url>;
-                $job = $host<queue-id> ?? self.new-job: :$api !! self.new-job: :$api, :project{$host<queue-id>};
+                $job = $host<queue-id> ?? self.new-job: :$api, :project{$host<queue-id>} !! self.new-job: :$api;
                 say "trigger job on host: {$api}";
             } else {
-                $job = $host<queue-id> ?? self.new-job !! self.new-job: :project{$host<queue-id>};
+                $job = $host<queue-id> ?? self.new-job: :project{$host<queue-id>} !! self.new-job;
                 say "trigger job on host: localhost";
             }
 
