@@ -86,10 +86,11 @@ class Pipeline does Sparky::JobApi::Role {
             if $host<url> {
                 my $api = $host<url>;
                 my $project = $host<queue-id>;
-                $job = $host<queue-id> ?? (self.new-job: :$api, :$project) !! (self.new-job: :$api);
+                $job = $project ?? (self.new-job: :$api, :$project) !! (self.new-job: :$api);
                 say "trigger job on host: {$api}";
             } else {
-                $job = $host<queue-id> ?? (self.new-job: :project{$host<queue-id>}) !! (self.new-job);
+                my $project = $host<queue-id>;
+                $job = $project ?? (self.new-job: :$project) !! (self.new-job);
                 say "trigger job on host: localhost";
             }
 
@@ -171,13 +172,14 @@ class Pipeline does Sparky::JobApi::Role {
             if $host<url> {
                 my $api = $host<url>;
                 my $project = $host<queue-id>;
-                $job = $host<queue-id> ?? (self.new-job: :$api, :$project) !! (self.new-job: :$api);
+                $job = $project ?? (self.new-job: :$api, :$project) !! (self.new-job: :$api);
                 say "trigger job on host: {$api}";
             } else {
-                $job = $host<queue-id> ?? (self.new-job: :project{$host<queue-id>}) !! (self.new-job);
+                my $project = $host<queue-id>;
+                $job = $project ?? (self.new-job: :$project) !! (self.new-job);
                 say "trigger job on host: localhost";
             }
-            
+
             my $cp = config()<projects>{$cromt-project};
 
             if $host<vars> {
