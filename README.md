@@ -236,6 +236,22 @@ And sparrowdo configurations:
         bootstrap: true
 ```
 
+`Url` is optional, if omitted - a job gets on the same host, so this code will
+run 3 jobs in parallel on the same host:
+
+```yaml
+  hosts:
+    - 
+      vars:
+        WORKER: 1 
+    - 
+      vars:
+        WORKER: 2 
+    - 
+      vars:
+        WORKER: 3
+```
+
 ## Job Dependencies
 
 Projects might have dependencies, so that some jobs might be run before or after
