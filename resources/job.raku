@@ -112,7 +112,7 @@ class Pipeline does Sparky::JobApi::Role {
               $job.put-stash({ vars => $envvars });
             }
 
-            my $description = config()<projects>{$.cromt-project}<title> || $host<title> || "(h) {$.cromt-project} [job run]";
+            my $description = $host<title> || config()<projects>{$.cromt-project}<title> || "(h) {$.cromt-project} [job run]";
 
             $job.queue: %(
               description => $description,
@@ -194,7 +194,7 @@ class Pipeline does Sparky::JobApi::Role {
               $job.put-stash({ vars => $j<vars> });
             }
 
-            my $description = $host<title> || $j<title> || "(dh) {$cromt-project} [job run]";
+            my $description = $host<title> || $j<title> || $cp<title> || "(dh) {$cromt-project} [job run]";
 
             $job.queue: %(
               description => $description,
@@ -226,7 +226,7 @@ class Pipeline does Sparky::JobApi::Role {
             $job.put-stash({ vars => $j<vars> });
           }
 
-          my $description =  $j<title> || "(d) {$cromt-project} [job run]";
+          my $description =  $j<title> || $cp<title> || "(d) {$cromt-project} [job run]";
 
           $job.queue: %(
             description => $description,
