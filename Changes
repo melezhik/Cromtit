@@ -2,6 +2,10 @@ Revision history for Cromtit
 
 {{$NEXT}}
 
+0.0.12 2022-09-13T10:40:00Z
+
+    Fix job titles logic
+
 0.0.11 2022-09-13T09:40:00Z
 
     Sequential jobs (named queues)
