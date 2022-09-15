@@ -6,7 +6,7 @@ Run [Tomtit](https://github.com/melezhik/Tomtit) scenarios as cron jobs and more
 
 # Build status
 
-[![SparkyCI](http://sparrowhub.io:2222/project/gh-melezhik-Cromtit/badge)](http://sparrowhub.io:2222)
+[![SparkyCI](https://ci.sparrowhub.io/project/gh-melezhik-Cromtit/badge)](https://ci.sparrowhub.io)
 
 # "What's in a name?"
 
