@@ -17,7 +17,7 @@ class Pipeline does Sparky::JobApi::Role {
   has Str $.storage_job_id = tags()<storage_job_id> || "";
 
   has Str $.storage_api = config()<storage> || "http://127.0.0.1:4000";
-
+  
   has Hash $.sparrowdo = config()<projects>{$!cromt-project}<sparrowdo> || {};
 
     method stage-main {
@@ -29,6 +29,8 @@ class Pipeline does Sparky::JobApi::Role {
       my %storage = $storage.info();
 
       my $description = config()<projects>{$!cromt-project}<title> || "{tags()<SPARKY_PROJECT>} [job run]";
+
+      my $timeout = config()<projects>{$!cromt-project}<timeout> || 600;
 
       $j.queue: %(
         description => $description,
@@ -43,7 +45,7 @@ class Pipeline does Sparky::JobApi::Role {
         sparrowdo => $.sparrowdo
       );
 
-      my $st = self.wait-job($j);
+      my $st = self.wait-job($j,{ timeout => $timeout.Int });
 
       die $st.perl unless $st<OK>;
 
@@ -61,6 +63,8 @@ class Pipeline does Sparky::JobApi::Role {
 
       my $envvars = $stash<vars> || config()<projects>{$.cromt-project}<vars> || {};
 
+      my $timeout = config()<projects>{$!cromt-project}<timeout> || 600;
+
       my $path = config()<projects>{$.cromt-project}<path>;
 
       if $.resolve-deps eq "yes" and config()<projects>{$.cromt-project}<before> {
@@ -69,7 +73,7 @@ class Pipeline does Sparky::JobApi::Role {
 
         say "waiting for dependencies jobs have finsihed ...";
 
-        my $st = self.wait-jobs(@jobs);
+        my $st = self.wait-jobs(@jobs,{ timeout => $timeout.Int });
 
         die $st.perl unless $st<OK>;
 
@@ -134,8 +138,8 @@ class Pipeline does Sparky::JobApi::Role {
           }
 
           say "waiting for hosts jobs have finsihed ...";
-
-          my $st = self.wait-jobs(@jobs);
+          
+          my $st = self.wait-jobs(@jobs,{ timeout => $timeout.Int });
 
           die $st.perl unless $st<OK>;
 
@@ -149,7 +153,7 @@ class Pipeline does Sparky::JobApi::Role {
 
         say "waiting for dependencies jobs have finsihed ...";
 
-        my $st = self.wait-jobs(@jobs);
+        my $st = self.wait-jobs(@jobs,{ timeout => $timeout });
 
         die $st.perl unless $st<OK>;
 
