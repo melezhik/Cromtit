@@ -49,6 +49,8 @@ class Pipeline does Sparky::JobApi::Role {
 
       die $st.perl unless $st<OK>;
 
+      say $st.perl;
+
     }
 
     method stage-run {
@@ -76,6 +78,8 @@ class Pipeline does Sparky::JobApi::Role {
         my $st = self.wait-jobs(@jobs,{ timeout => $timeout.Int });
 
         die $st.perl unless $st<OK>;
+
+        say $st.perl;
 
       }
 
@@ -143,6 +147,8 @@ class Pipeline does Sparky::JobApi::Role {
 
           die $st.perl unless $st<OK>;
 
+          say $st.perl;
+
       } else {
         self!job-run: :$action,:$options,:$envvars,:$path;
       }
@@ -157,6 +163,7 @@ class Pipeline does Sparky::JobApi::Role {
 
         die $st.perl unless $st<OK>;
 
+        say $st.perl;
       }
 
     }
