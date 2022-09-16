@@ -2,7 +2,15 @@ Revision history for Cromtit
 
 {{$NEXT}}
 
-0.0.11 2022-09-12T16:40:00Z
+0.0.13 2022-09-15T17:40:00Z
+
+    Update CI badge
+
+0.0.12 2022-09-13T10:40:00Z
+
+    Fix job titles logic
+
+0.0.11 2022-09-13T09:40:00Z
 
     Sequential jobs (named queues)
     Job titles
