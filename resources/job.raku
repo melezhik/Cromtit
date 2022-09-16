@@ -47,7 +47,7 @@ class Pipeline does Sparky::JobApi::Role {
 
       my $st = self.wait-job($j,{ timeout => $timeout.Int });
 
-      die $st.perl unless $st<OK>;
+      die $st.perl unless $st<OK> == 1;
 
       say $st.perl;
 
@@ -77,7 +77,7 @@ class Pipeline does Sparky::JobApi::Role {
 
         my $st = self.wait-jobs(@jobs,{ timeout => $timeout.Int });
 
-        die $st.perl unless $st<OK>;
+        die $st.perl unless $st<OK> == @jobs.elems;
 
         say $st.perl;
 
@@ -145,7 +145,7 @@ class Pipeline does Sparky::JobApi::Role {
           
           my $st = self.wait-jobs(@jobs,{ timeout => $timeout.Int });
 
-          die $st.perl unless $st<OK>;
+          die $st.perl unless $st<OK> == @jobs.elems;
 
           say $st.perl;
 
@@ -161,7 +161,7 @@ class Pipeline does Sparky::JobApi::Role {
 
         my $st = self.wait-jobs(@jobs,{ timeout => $timeout });
 
-        die $st.perl unless $st<OK>;
+        die $st.perl unless $st<OK> == @jobs.elems;
 
         say $st.perl;
       }
