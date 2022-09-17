@@ -334,10 +334,11 @@ One can set job timeout by using `timeout` parameter:
 So `timeout` set in a job with hosts parallelization will cause wait till all
 hosts jobs have finished for `timeout` seconds or raise "job timeout" exception
 
-`timeout` for a single job (without hosts parallelization) will affect only this job
+`timeout` for a single job (without hosts parallelization) will affect only this job,
+will wait for `timeout` second till a job finished
 
-`timeout` set in dependent job (that have other job dependencies) will cause wait till
-all dependencies jobs have finished or raise "job timeout" exception
+`timeout` set in dependent job (that have other job dependencies) will cause wait 
+for `timeout` seconds till all dependencies jobs have finished or raise "job timeout" exception
 
 # Job queues
 
