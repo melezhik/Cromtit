@@ -311,6 +311,35 @@ Nested dependencies are allowed, so a dependency might have another dependency, 
 
 Just be cautious about cycles. This should be directed acycling graph of dependencies.
 
+# Job timeouts
+
+One can set job timeout by using `timeout` parameter:
+
+
+```yaml
+  # wait 1200 sec till all 4 jobs have finished
+  timeout: 1200
+  hosts:
+    - 
+      vars:
+        WORKER: 1 
+    - 
+      vars:
+        WORKER: 2 
+    - 
+      vars:
+        WORKER: 3
+```
+
+So `timeout` set in a job with hosts parallelization will cause wait till all
+hosts jobs have finished for `timeout` seconds or raise "job timeout" exception
+
+`timeout` for a single job (without hosts parallelization) will affect only this job,
+will wait for `timeout` second till a job finished
+
+`timeout` set in dependent job (that have other job dependencies) will cause wait 
+for `timeout` seconds till all dependencies jobs have finished or raise "job timeout" exception
+
 # Job queues
 
 Jobs from `hosts` list executed in parallel, to enable sequential execution use `queue-id` option,
