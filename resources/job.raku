@@ -23,6 +23,7 @@ class Pipeline does Sparky::JobApi::Role {
     method stage-main {
 
       my $project = config()<projects>{$!cromt-project}<queue-id>;
+
       my $j;
       
       if config()<projects>{$!cromt-project}<url> {
