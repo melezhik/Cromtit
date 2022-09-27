@@ -69,7 +69,11 @@ class Pipeline does Sparky::JobApi::Role {
 
       my $path = config()<projects>{$.cromt-project}<path>;
 
+      say ">>> handle job config: ", config()<projects>{$.cromt-project}.perl;
+
       if $.resolve-deps eq "yes" and config()<projects>{$.cromt-project}<before> {
+
+        say ">>> enter before block: ", config()<projects>{$.cromt-project}<before>.perl;
 
         my @jobs = self!run-job-dependency(config()<projects>{$.cromt-project}<before>);
 
@@ -87,7 +91,7 @@ class Pipeline does Sparky::JobApi::Role {
 
           my @jobs;
 
-          say "stage-run - handle hosts: ", config()<projects>{$.cromt-project}<hosts><>.perl;
+          say ">>> enter hosts block: ", config()<projects>{$.cromt-project}<hosts>.perl;
 
           for config()<projects>{$.cromt-project}<hosts><> -> $host {
 
@@ -154,6 +158,8 @@ class Pipeline does Sparky::JobApi::Role {
       }
  
       if $.resolve-deps eq "yes" and config()<projects>{$.cromt-project}<after> {
+
+        say ">>> enter after block: ", config()<projects>{$.cromt-project}<after>.perl;
 
         my @jobs = self!run-job-dependency(config()<projects>{$.cromt-project}<after>);
 
