@@ -22,7 +22,19 @@ class Pipeline does Sparky::JobApi::Role {
 
     method stage-main {
 
-      my $j = self.new-job;
+      my $project = config()<projects>{$!cromt-project}<queue-id>;
+      my $j;
+      
+      if config()<projects>{$!cromt-project}<url> {
+          my $api = config()<projects>{$!cromt-project}<url>;
+          my $project = config()<projects>{$!cromt-project}<queue-id>;
+          $j = $project ?? (self.new-job: :$api, :$project) !! (self.new-job: :$api);
+          say "trigger job on host: {$api}";
+      } else {
+          my $project = config()<projects>{$!cromt-project}<queue-id>;
+          $j = $project ?? (self.new-job: :$project) !! (self.new-job);
+          say "trigger job on host: localhost";
+      }
 
       my $storage = self.new-job: api => $.storage_api;  
 
