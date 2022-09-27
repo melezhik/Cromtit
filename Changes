@@ -2,6 +2,10 @@ Revision history for Cromtit
 
 {{$NEXT}}
 
+0.0.15 2022-09-26T19:30:00Z
+
+    Add some debug information
+
 0.0.14 2022-09-17T19:50:00Z
 
     Proper jobs errors handling

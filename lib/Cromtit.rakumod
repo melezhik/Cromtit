@@ -2,7 +2,7 @@
 
 use v6;
 
-unit module Cromtit:ver<0.0.14>;
+unit module Cromtit:ver<0.0.15>;
 
 our sub job-template () is export {
   %?RESOURCES<job.raku>.Str.IO.slurp;
