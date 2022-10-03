@@ -79,8 +79,6 @@ class Pipeline does Sparky::JobApi::Role {
 
       my $conf = config()<projects>{$.cromt-project};
 
-      my $envvars = $stash<vars> || $conf<vars> || {};
-
       my $timeout = $conf<timeout> || 600;
 
       my $path = $conf<path>;
@@ -113,34 +111,23 @@ class Pipeline does Sparky::JobApi::Role {
 
             my $job;
 
-            if $host<url> {
-                my $api = $host<url>;
-                my $project = $host<queue-id>;
+            if $host<url> || $conf<url> {
+                my $api = $host<url> || $conf<url>;
+                my $project = $host<queue-id> || $conf<queue-id>;
                 $job = $project ?? (self.new-job: :$api, :$project) !! (self.new-job: :$api);
-                say "trigger job on host: {$api}";
+                say "trigger job on host: {$api} | host conf: {$host.perl} | conf: {$conf.perl}";
             } else {
-                my $project = $host<queue-id>;
+                my $project = $host<queue-id> || $conf<queue-id>;
                 $job = $project ?? (self.new-job: :$project) !! (self.new-job);
-                say "trigger job on host: localhost";
+                say "trigger job on host: localhost | host conf: {$host.perl} | conf: {$conf.perl}";
             }
 
-            if $host<vars> {
+            if $host<vars> || $conf<vars> {
               say "save job vars ...";    
-              $job.put-stash({ vars => $host<vars> });
-            } else {
-              say "save job vars ...";    
-              $job.put-stash({ vars => $envvars });
-            }
+              $job.put-stash({ vars => $host<vars> || $conf<vars> || {} });
+            } 
 
-            if $host<vars> {
-              say "save job vars ...";    
-              $job.put-stash({ vars => $host<vars> });
-            } else {
-              say "save job vars ...";    
-              $job.put-stash({ vars => $envvars });
-            }
-
-            my $description = $host<title> || $conf<title> || "(h) {$.cromt-project} [job run]";
+            my $description = $host<title> || $conf<title> || "(host) {$.cromt-project} [job run]";
 
             $job.queue: %(
               description => $description,
@@ -170,6 +157,7 @@ class Pipeline does Sparky::JobApi::Role {
           say $st.perl;
 
       } else {
+        my $envvars = $stash<vars> || {};   
         self!job-run: :$action,:$options,:$envvars,:$path;
       }
  
@@ -198,6 +186,8 @@ class Pipeline does Sparky::JobApi::Role {
   
         my $cromt-project = $j<name>;
 
+        my $conf = config()<projects>{$cromt-project};
+
         if $.resolve-hosts eq "yes" and $j<hosts> {
 
           say "run-job-dependency - handle hosts: ", $j<hosts><>.perl;
@@ -206,15 +196,15 @@ class Pipeline does Sparky::JobApi::Role {
 
             my $job;
 
-            if $host<url> {
-                my $api = $host<url> || $j<url>;
+            if $host<url> || $j<url> || $conf<url> {
+                my $api = $host<url> || $j<url> || $conf<url>;
                 my $project = $host<queue-id> || $j<queue-id>;
                 $job = $project ?? (self.new-job: :$api, :$project) !! (self.new-job: :$api);
-                say "trigger job on host: {$api} | conf: {$host.perl}";
+                say "trigger job on host: {$api} | host conf: {$host.perl} | deb conf: {$j.perl} | conf: {$conf.perl}";
             } else {
                 my $project = $host<queue-id> || $j<queue-id>;
                 $job = $project ?? (self.new-job: :$project) !! (self.new-job);
-                say "trigger job on host: localhost | conf: {$host.perl}";
+                say "trigger job on host: localhost | host conf: {$host.perl} | dep conf: {$j.perl} | conf: {$conf.perl}";
             }
 
             if $host<vars> || $j<vars> {
@@ -222,7 +212,7 @@ class Pipeline does Sparky::JobApi::Role {
               $job.put-stash({ vars => $host<vars> || $j<vars> || {}});
             } 
 
-            my $description = $host<title> || $j<title> || "(dh) {$cromt-project} [job run]";
+            my $description = $host<title> || $j<title> || $conf<title> || "(dep host) {$cromt-project} [job run]";
 
             $job.queue: %(
               description => $description,
@@ -245,17 +235,15 @@ class Pipeline does Sparky::JobApi::Role {
 
           my $job;
 
-          my $conf = config()<projects>{$cromt-project};
-
-          if $conf<url> {
-              my $api = $conf<url>;
-              my $project = $conf<queue-id>;
+          if $j<url> || $conf<url> {
+              my $api = $j<url> || $conf<url>;
+              my $project = $j<queue-id> || $conf<queue-id>;
               $job = $project ?? (self.new-job: :$api, :$project) !! (self.new-job: :$api);
-              say "trigger job on host: {$api} | conf: {$conf.perl}";
+              say "trigger job on host: {$api} | dep conf: {$j.perl} | conf: {$conf.perl}";
           } else {
-              my $project = $conf<queue-id>;
+              my $project = $j<queue-id> || $conf<queue-id>;
               $job = $project ?? (self.new-job: :$project) !! (self.new-job);
-              say "trigger job on host: localhost | conf: {$conf.perl}";
+              say "trigger job on host: localhost | dep conf: {$j.perl} | conf: {$conf.perl}";
           }
 
           if $j<vars> {
@@ -263,7 +251,7 @@ class Pipeline does Sparky::JobApi::Role {
             $job.put-stash({ vars => $j<vars> });
           }
 
-          my $description =  $j<title> || $conf<title> || "(d) {$cromt-project} [job run]";
+          my $description =  $j<title> || $conf<title> || "(dep) {$cromt-project} [job run]";
 
           $job.queue: %(
             description => $description,
