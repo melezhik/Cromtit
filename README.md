@@ -174,9 +174,17 @@ vars:
 
 Set Sparky API url. Optional. See "hosts.url" description.
 
+### queue-id
+
+Sparky project name. Optional. See "hosts.queue-id" description
+
+### title 
+
+Job title. Optional. See "Job description" section.
+
 ### sparrowdo
 
-Override job sparrowdo configuration. For example:
+Override job sparrowdo configuration. Optional. For example:
 
 ```yaml
 sparrowdo:
@@ -256,6 +264,9 @@ run 3 jobs in parallel on the same host:
       vars:
         WORKER: 3
 ```
+
+
+`title` and `queue-id` parameters are also applicable for `hosts`
 
 ## Job Dependencies
 
