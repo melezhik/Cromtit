@@ -18,8 +18,6 @@ class Pipeline does Sparky::JobApi::Role {
 
   has Str $.storage_api = config()<storage> || "http://127.0.0.1:4000";
   
-  has Str $.queue_id = tags()<queue_id> || "";
-
   has Hash $.sparrowdo = config()<projects>{$!cromt-project}<sparrowdo> || {};
 
     method stage-main {
@@ -30,11 +28,11 @@ class Pipeline does Sparky::JobApi::Role {
       
       if $conf<url> {
           my $api = $conf<url>;
-          my $project = $conf<queue-id> || $.queue_id;
+          my $project = $conf<queue-id>;
           $j = $project ?? (self.new-job: :$api, :$project) !! (self.new-job: :$api);
           say "trigger job on host: {$api} | conf: {$conf.perl}";
       } else {
-          my $project = $conf<queue-id> || $.queue_id;
+          my $project = $conf<queue-id>;
           $j = $project ?? (self.new-job: :$project) !! (self.new-job);
           say "trigger job on host: localhost | conf: {$conf.perl}";
       }
@@ -56,7 +54,7 @@ class Pipeline does Sparky::JobApi::Role {
           options => $.options,
           storage_project => %storage<project>,
           storage_job_id => %storage<job-id>,
-          queue_id => $conf<queue-id> || $.queue_id,
+          queue_id => $conf<queue-id>,
         ),
         sparrowdo => $.sparrowdo
       );
@@ -250,18 +248,27 @@ class Pipeline does Sparky::JobApi::Role {
           }    
         } else {
 
-          my $job = self.new-job;
+          my $job;
 
-          say "trigger job on host: localhost";
+          my $conf = config()<projects>{$cromt-project};
 
-          my $cp = config()<projects>{$cromt-project};
+          if $conf<url> {
+              my $api = $conf<url>;
+              my $project = $conf<queue-id>;
+              $j = $project ?? (self.new-job: :$api, :$project) !! (self.new-job: :$api);
+              say "trigger job on host: {$api} | conf: {$conf.perl}";
+          } else {
+              my $project = $conf<queue-id>;
+              $j = $project ?? (self.new-job: :$project) !! (self.new-job);
+              say "trigger job on host: localhost | conf: {$conf.perl}";
+          }
 
           if $j<vars> {
             say "save job vars ...";    
             $job.put-stash({ vars => $j<vars> });
           }
 
-          my $description =  $j<title> || $cp<title> || "(d) {$cromt-project} [job run]";
+          my $description =  $j<title> || $conf<title> || "(d) {$cromt-project} [job run]";
 
           $job.queue: %(
             description => $description,
@@ -273,7 +280,7 @@ class Pipeline does Sparky::JobApi::Role {
               storage_project => $.storage_project,
               storage_job_id => $.storage_job_id,
             ),
-            sparrowdo => $j<sparrowdo> || $cp<sparrowdo> || {}
+            sparrowdo => $j<sparrowdo> || $conf<sparrowdo> || {}
           );
 
           @jobs.push: $job;
