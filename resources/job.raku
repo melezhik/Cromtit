@@ -250,11 +250,11 @@ class Pipeline does Sparky::JobApi::Role {
           if $conf<url> {
               my $api = $conf<url>;
               my $project = $conf<queue-id>;
-              $j = $project ?? (self.new-job: :$api, :$project) !! (self.new-job: :$api);
+              $job = $project ?? (self.new-job: :$api, :$project) !! (self.new-job: :$api);
               say "trigger job on host: {$api} | conf: {$conf.perl}";
           } else {
               my $project = $conf<queue-id>;
-              $j = $project ?? (self.new-job: :$project) !! (self.new-job);
+              $job = $project ?? (self.new-job: :$project) !! (self.new-job);
               say "trigger job on host: localhost | conf: {$conf.perl}";
           }
 
