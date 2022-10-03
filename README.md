@@ -169,6 +169,11 @@ vars:
   password: SecRet123
 
 ```
+
+### url 
+
+Set Sparky API url. Optional. See "hosts.url" description.
+
 ### sparrowdo
 
 Override job sparrowdo configuration. For example:
@@ -202,7 +207,7 @@ projects:
       url: https://192.168.0.3
 ```
 
-Hosts list should contain a list of Sparky API URLs 
+Hosts list contains a list of Sparky API URLs (see also comment on optional url) 
 and hosts need to be a part of the same [Sparky cluster](https://github.com/melezhik/sparky#cluster-jobs).
 
 Optionally every host could override vars:
@@ -236,7 +241,7 @@ And sparrowdo configurations:
         bootstrap: true
 ```
 
-`Url` is optional, if omitted - a job gets on the same host, so this code will
+`url` is optional, if omitted - a job gets on the same host, so this code will
 run 3 jobs in parallel on the same host:
 
 ```yaml

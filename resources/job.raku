@@ -207,40 +207,35 @@ class Pipeline does Sparky::JobApi::Role {
             my $job;
 
             if $host<url> {
-                my $api = $host<url>;
-                my $project = $host<queue-id>;
+                my $api = $host<url> || $j<url>;
+                my $project = $host<queue-id> || $j<queue-id>;
                 $job = $project ?? (self.new-job: :$api, :$project) !! (self.new-job: :$api);
-                say "trigger job on host: {$api}";
+                say "trigger job on host: {$api} | conf: {$host.perl}";
             } else {
-                my $project = $host<queue-id>;
+                my $project = $host<queue-id> || $j<queue-id>;
                 $job = $project ?? (self.new-job: :$project) !! (self.new-job);
-                say "trigger job on host: localhost";
+                say "trigger job on host: localhost | conf: {$host.perl}";
             }
 
-            my $cp = config()<projects>{$cromt-project};
-
-            if $host<vars> {
+            if $host<vars> || $j<vars> {
               say "save job vars ...";    
-              $job.put-stash({ vars => $host<vars> });
-            } elsif $j<vars> {
-              say "save job vars ...";    
-              $job.put-stash({ vars => $j<vars> });
-            }
+              $job.put-stash({ vars => $host<vars> || $j<vars> || {}});
+            } 
 
-            my $description = $host<title> || $j<title> || $cp<title> || "(dh) {$cromt-project} [job run]";
+            my $description = $host<title> || $j<title> || "(dh) {$cromt-project} [job run]";
 
             $job.queue: %(
               description => $description,
               tags => %(
                 stage => "run",
                 cromt-project => $cromt-project,
-                action => $j<action>,
-                options => $j<options>,
+                action => $host<action> || $j<action>,
+                options => $host<options> || $j<options>,
                 resolve-hosts => "no",
                 storage_project => $.storage_project,
                 storage_job_id => $.storage_job_id,              
               ),
-              sparrowdo => $host<sparrowdo> || $j<sparrowdo> || $cp<sparrowdo> || {},
+              sparrowdo => $host<sparrowdo> || $j<sparrowdo> || {},
             );
 
             @jobs.push: $job;
