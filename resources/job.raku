@@ -18,32 +18,34 @@ class Pipeline does Sparky::JobApi::Role {
 
   has Str $.storage_api = config()<storage> || "http://127.0.0.1:4000";
   
+  has Str $.queue_id = tags()<queue_id> || "";
+
   has Hash $.sparrowdo = config()<projects>{$!cromt-project}<sparrowdo> || {};
 
     method stage-main {
 
       my $project = config()<projects>{$!cromt-project}<queue-id>;
-
+      my $conf = config()<projects>{$!cromt-project};
       my $j;
       
-      if config()<projects>{$!cromt-project}<url> {
-          my $api = config()<projects>{$!cromt-project}<url>;
-          my $project = config()<projects>{$!cromt-project}<queue-id>;
+      if $conf<url> {
+          my $api = $conf<url>;
+          my $project = $conf<queue-id> || $.queue_id;
           $j = $project ?? (self.new-job: :$api, :$project) !! (self.new-job: :$api);
-          say "trigger job on host: {$api}";
+          say "trigger job on host: {$api} | conf: {$conf.perl}";
       } else {
-          my $project = config()<projects>{$!cromt-project}<queue-id>;
+          my $project = $conf<queue-id> || $.queue_id;
           $j = $project ?? (self.new-job: :$project) !! (self.new-job);
-          say "trigger job on host: localhost";
+          say "trigger job on host: localhost | conf: {$conf.perl}";
       }
 
       my $storage = self.new-job: api => $.storage_api;  
 
       my %storage = $storage.info();
 
-      my $description = config()<projects>{$!cromt-project}<title> || "{tags()<SPARKY_PROJECT>} [job run]";
+      my $description = $conf<title> || "{tags()<SPARKY_PROJECT>} [job run]";
 
-      my $timeout = config()<projects>{$!cromt-project}<timeout> || 600;
+      my $timeout = $conf<timeout> || 600;
 
       $j.queue: %(
         description => $description,
@@ -54,6 +56,7 @@ class Pipeline does Sparky::JobApi::Role {
           options => $.options,
           storage_project => %storage<project>,
           storage_job_id => %storage<job-id>,
+          queue_id => $conf<queue-id> || $.queue_id,
         ),
         sparrowdo => $.sparrowdo
       );
@@ -76,19 +79,21 @@ class Pipeline does Sparky::JobApi::Role {
 
       my $stash = $j.get-stash();
 
-      my $envvars = $stash<vars> || config()<projects>{$.cromt-project}<vars> || {};
+      my $conf = config()<projects>{$.cromt-project};
 
-      my $timeout = config()<projects>{$!cromt-project}<timeout> || 600;
+      my $envvars = $stash<vars> || $conf<vars> || {};
 
-      my $path = config()<projects>{$.cromt-project}<path>;
+      my $timeout = $conf<timeout> || 600;
 
-      say ">>> handle job config: ", config()<projects>{$.cromt-project}.perl;
+      my $path = $conf<path>;
 
-      if $.resolve-deps eq "yes" and config()<projects>{$.cromt-project}<before> {
+      say ">>> handle job config: ", $conf.perl;
 
-        say ">>> enter before block: ", config()<projects>{$.cromt-project}<before>.perl;
+      if $.resolve-deps eq "yes" and $conf<before> {
 
-        my @jobs = self!run-job-dependency(config()<projects>{$.cromt-project}<before>);
+        say ">>> enter before block: ", $conf<before>.perl;
+
+        my @jobs = self!run-job-dependency($conf<before>);
 
         say "waiting for dependencies jobs have finsihed ...";
 
@@ -100,13 +105,13 @@ class Pipeline does Sparky::JobApi::Role {
 
       }
 
-      if $.resolve-hosts eq "yes" && config()<projects>{$.cromt-project}<hosts><> {
+      if $.resolve-hosts eq "yes" && $conf<hosts><> {
 
           my @jobs;
 
-          say ">>> enter hosts block: ", config()<projects>{$.cromt-project}<hosts>.perl;
+          say ">>> enter hosts block: ", $conf<hosts>.perl;
 
-          for config()<projects>{$.cromt-project}<hosts><> -> $host {
+          for $conf<hosts><> -> $host {
 
             my $job;
 
@@ -137,7 +142,7 @@ class Pipeline does Sparky::JobApi::Role {
               $job.put-stash({ vars => $envvars });
             }
 
-            my $description = $host<title> || config()<projects>{$.cromt-project}<title> || "(h) {$.cromt-project} [job run]";
+            my $description = $host<title> || $conf<title> || "(h) {$.cromt-project} [job run]";
 
             $job.queue: %(
               description => $description,
@@ -170,11 +175,11 @@ class Pipeline does Sparky::JobApi::Role {
         self!job-run: :$action,:$options,:$envvars,:$path;
       }
  
-      if $.resolve-deps eq "yes" and config()<projects>{$.cromt-project}<after> {
+      if $.resolve-deps eq "yes" and $conf<after> {
 
-        say ">>> enter after block: ", config()<projects>{$.cromt-project}<after>.perl;
+        say ">>> enter after block: ", $conf<after>.perl;
 
-        my @jobs = self!run-job-dependency(config()<projects>{$.cromt-project}<after>);
+        my @jobs = self!run-job-dependency($conf<after>);
 
         say "waiting for dependencies jobs have finsihed ...";
 
