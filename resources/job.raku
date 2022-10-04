@@ -157,7 +157,7 @@ class Pipeline does Sparky::JobApi::Role {
           say $st.perl;
 
       } else {
-        my $envvars = $stash<vars> || {};   
+        my $envvars = $stash<vars> || $conf<vars> {};   
         self!job-run: :$action,:$options,:$envvars,:$path;
       }
  
