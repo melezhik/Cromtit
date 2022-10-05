@@ -487,9 +487,9 @@ http://127.0.0.1:4000
 
 * [Fastspec](https://github.com/melezhik/fastspec)
 
-* [https://github.com/melezhik/fastspec](https://github.com/melezhik/rakusta)
+* [Rakusta](https://github.com/melezhik/rakusta)
 
-* [raku-alpine-repo](https://github.com/melezhik/raku-alpine-repo)
+* [RAR](https://github.com/melezhik/raku-alpine-repo)
 
 # Thanks to
 
