@@ -8,3 +8,6 @@ sparrowdo:
 disabled: false
 allow_manual_run: true
 keep_builds: 10
+#%scm%:
+  #%url%: %path%
+  #%branch%: %scm_branch%

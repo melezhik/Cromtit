@@ -137,6 +137,25 @@ One can use either `git@` or `https://` schemes for git urls:
 path: https://github.com/melezhik/r3tool.git
 ```
 
+Triggering overs SCM changes. Use `trigger` flag to automatically trigger job
+over SCM changes:
+
+
+```yaml
+# trigger a new job in case of
+# any new changes (commits)
+# arrive to a default branch
+# if r3tool.git repo
+path: https://github.com/melezhik/r3tool.git
+trigger: true
+```
+
+To set a specific branch for triggering, use `branch` option:
+
+```yaml
+branch: dev
+```
+
 ### crontab
 
 Should represents crontab entry (how often and when to run a project), should

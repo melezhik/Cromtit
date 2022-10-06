@@ -31,6 +31,13 @@ if $conf.IO ~~ :e {
     say "prepare sparky.yaml ...";
     my $sparky-yaml = sparky-template();
     $sparky-yaml.=subst("%cromt-project%",$p);
+    if $pd<trigger> {
+      $sparky-yaml.=subst("#%scm%","scm"); 
+      $sparky-yaml.=subst("#%url%","url"); 
+      $sparky-yaml.=subst("#%branch%","branch"); 
+      $sparky-yaml.=subst("%path%",$pd<path>); 
+      $sparky-yaml.=subst("%scm_branch%",$pd<branch>||"HEAD"); 
+    }
     if $pd<crontab> {
       $sparky-yaml.=subst("#%crontab%","crontab: {$pd<crontab>}") 
     }
