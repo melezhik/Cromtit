@@ -41,19 +41,69 @@ and configure Sparky first:
 zef install Cromtit
 ```
 
-# Configure
+# Quick start
 
-Create `~/cromtit.yaml` file, see `Projects configuration` section. 
+This example would restart Apache server every Sunday 08:00 local server time.
 
-Once a configuration file is created, apply changes:
+Create Bash task:
 
 ```bash
-cromt
+mkdir -p tasks/apache/
+cat << HERE > tasks/apache/restart.bash
+sudo apachectl graceful
+HERE
 ```
 
-# ~/cromtit.yaml specification
+Create Tomtit scenario:
 
- `~/cromtit.yaml` should contain a list of Tomtit projects:
+```bash
+tom --init 
+tom --edit apache-restart
+
+#!raku
+
+task-run "tasks/apache";
+```
+
+Create Cromtit configuration file `jobs.yaml`:
+
+```yaml
+projects:
+  apache:
+    # should be a git repository with tomtit scenarios
+    path: git@github.com:melezhik/cromtit-cookbook.git
+    action: restart
+    crontab: "0 8 * * 0"
+```
+
+Commit changes to git repo:
+
+```bash
+git init
+echo ".cache" > .gitignore
+
+git add .tom/ .gitignore jobs.yaml
+
+git remote add origin git@github.com:melezhik/cromtit-cookbook.git
+git branch -M main
+git push -u origin main
+```
+
+# Configuration DSL
+
+
+Cromtit comes with configuration language allows use to define 
+jobs logic.
+
+Create `jobs.yaml` file and edit it. Then apply changes:
+
+```bash
+cromt --conf jobs.yaml
+```
+
+# Configuration file specification
+
+Cromtit configuration contains a list of Tomtit projects:
 
 ```yaml
 # list of Tomtit projects
