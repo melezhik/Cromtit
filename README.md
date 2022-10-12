@@ -83,6 +83,7 @@ git init
 echo ".cache" > .gitignore
 
 git add .tom/ .gitignore jobs.yaml
+git commit -a -m "apache restart"
 
 git remote add origin git@github.com:melezhik/cromtit-cookbook.git
 git branch -M main
