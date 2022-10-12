@@ -9,8 +9,8 @@ This example would restart Apache server every Sunday 08:00 local server time.
 Bash task:
 
 ```bash
-mkdir -p tasks/apache/
-cat << HERE > tasks/apache/restart.bash
+mkdir -p tasks/apache/restart/
+cat << HERE > tasks/apache/restart/task.bash
 sudo apachectl graceful
 HERE
 ```
@@ -22,7 +22,7 @@ tom --edit apache-restart
 
 #!raku
 
-task-run "tasks/apache";
+task-run "tasks/apache/restart";
 ```
 
 Cromtit jobfile
