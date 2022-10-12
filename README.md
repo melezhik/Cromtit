@@ -556,7 +556,7 @@ You can find a configuration file examples at `examples/` directory
 
 ## Cookbook
 
-[Cookbook.md](blob/main/cookbooks.md) file contains useful users scenarios
+[Cookbook.md](cookbook.md) file contains useful users scenarios
 
 ## Existing Cromit based projects
 
