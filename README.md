@@ -2,7 +2,7 @@
 
 Run [Tomtit](https://github.com/melezhik/Tomtit) scenarios as cron jobs and more.
 
-![web ui](https://raw.githubusercontent.com/melezhik/Cromtit/main/samples/web-ui.jpeg)
+![web ui](https://raw.githubusercontent.com/melezhik/Cromtit/main/samples/cromtit-ui.jpeg)
 
 # Build status
 
