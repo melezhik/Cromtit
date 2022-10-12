@@ -492,17 +492,23 @@ Options:
 
 Path to cromtit configuration file to apply. Optional. Default value is `~/cromtit.yaml`
 
-# Configuration file example
-
-You can find a configuration file example at `examples/` directory
-
 # Web console
 
 Sparky exposes a web UI to track projects, cron jobs and reports:
 
 http://127.0.0.1:4000
 
-# Existing Cromit based projects
+# More
+
+## Configuration file examples
+
+You can find a configuration file examples at `examples/` directory
+
+## Cookbook
+
+[Cookbook.md](blob/main/cookbooks.md) file contains useful users scenarios
+
+## Existing Cromit based projects
 
 * [Fastspec](https://github.com/melezhik/fastspec)
 
